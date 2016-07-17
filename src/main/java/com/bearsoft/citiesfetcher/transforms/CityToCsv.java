@@ -45,7 +45,7 @@ public class CityToCsv implements Function<City, StringBuilder> {
                 .append(',')
                 .append(aCity.getLatitude())
                 .append(',')
-                .append(aCity.getLongtitude())
+                .append(aCity.getlongitude())
                 .append('\r')
                 .append('\n');
         return builder;

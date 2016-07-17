@@ -5,7 +5,9 @@
  */
 package com.bearsoft.citiesfetcher;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
 
 /**
@@ -16,25 +18,28 @@ import java.nio.file.Paths;
  */
 public class Settings {
 
+    private static final String ENDPOINT_TEMPLATE
+            = "http://api.goeuro.com/api/v2/position/suggest/en/%s";
+
     /**
-     * City name setting.
+     * Cities source url.
      */
-    private final String cityName;
+    private final URL citiesSource;
     /**
-     * Destination path setting.
+     * Destination file.
      */
-    private final Path destination;
+    private final File destination;
 
     /**
      * Constructor of settings. protected because it is intended for creation by
      * factory method.
      *
-     * @param aCityName Name of the city in this settings.
+     * @param aCitySource Url of cities source end point.
      * @param aDestination A path to output file.
      */
-    protected Settings(final String aCityName, final Path aDestination) {
+    protected Settings(final URL aCitySource, final File aDestination) {
         super();
-        cityName = aCityName;
+        citiesSource = aCitySource;
         destination = aDestination;
     }
 
@@ -43,17 +48,17 @@ public class Settings {
      *
      * @return City name.
      */
-    public final String getCityName() {
-        return cityName;
+    public final URL getCitySource() {
+        return citiesSource;
     }
 
     /**
-     * Destination path getter.
+     * Destination file getter.
      *
-     * @return A {@code Path} of the output file.
-     * @see Path
+     * @return A {@code File} of the output file.
+     * @see File
      */
-    public final Path getDestination() {
+    public final File getDestination() {
         return destination;
     }
 
@@ -68,17 +73,21 @@ public class Settings {
      */
     public static Settings parse(final String... args)
             throws BadSettingsFormatException {
-        switch (args.length) {
-            case ONLY_CITY_ARGS_LENGTH:
-                return new Settings(args[0], Paths.get(args[0] + ".csv"));
-            case WITH_FILE_ARGS_LENGTH:
-                if ("-f".equals(args[1])) {
-                    return new Settings(args[0], Paths.get(args[2]));
-                } else {
+        try {
+            switch (args.length) {
+                case ONLY_CITY_ARGS_LENGTH:
+                    return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[0] + ".csv").toFile());
+                case WITH_FILE_ARGS_LENGTH:
+                    if ("-f".equals(args[1])) {
+                        return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[2]).toFile());
+                    } else {
+                        throw new BadSettingsFormatException();
+                    }
+                default:
                     throw new BadSettingsFormatException();
-                }
-            default:
-                throw new BadSettingsFormatException();
+            }
+        } catch (MalformedURLException ex) {
+            throw new IllegalStateException(ex);
         }
     }
     /**

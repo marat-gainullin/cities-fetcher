@@ -10,6 +10,7 @@ import com.bearsoft.citiesfetcher.model.City;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Json to city transformer. Transforms a part of json tokens stream from
@@ -62,39 +63,56 @@ public final class JsonToCities implements CitiesFeed {
      * {@code IOException} is thrown.
      */
     @Override
-    public City pullNext() throws IOException {
+    public Optional<City> pull() throws IOException {
         JsonToken objectStart = parser.nextToken();
-        assert objectStart == JsonToken.START_OBJECT :
-                "Json object expected.";
-        CityBuilder builder = new CityBuilder();
-        walkObject(() -> {
-            String fieldName = parser.getCurrentName();
-            switch (fieldName) {
-                case "_id":
-                    builder.id(parser.getLongValue());
-                    break;
-                case "name":
-                    builder.name(parser.getText());
-                    break;
-                case "type":
-                    builder.type(parser.getText());
-                    break;
-                case "geo_position":
-                    walkObject(() -> {
-                        String geoFieldName = parser.getCurrentName();
-                        switch (geoFieldName) {
-                            case "latitude":
-                                builder.latitude(parser.getDoubleValue());
-                                break;
-                            case "longtitude":
-                                builder.longtitude(parser.getDoubleValue());
-                                break;
-                        }
-                    });
-                    break;
+        if (objectStart != null) {
+            if (objectStart != JsonToken.START_OBJECT) {
+                throw new IOException("Json object expected.");
             }
-        });
-        return builder.toCity();
+            CityBuilder builder = new CityBuilder();
+            walkObject(() -> {
+                String fieldName = parser.getCurrentName();
+                switch (fieldName) {
+                    case "_id":
+                        builder.id(parser.getLongValue());
+                        break;
+                    case "name":
+                        builder.name(parser.getText());
+                        break;
+                    case "type":
+                        builder.type(parser.getText());
+                        break;
+                    case "geo_position":
+                        walkObject(() -> {
+                            String geoFieldName = parser.getCurrentName();
+                            switch (geoFieldName) {
+                                case "latitude":
+                                    builder.latitude(parser.getDoubleValue());
+                                    break;
+                                case "longitude":
+                                    builder.longitude(parser.getDoubleValue());
+                                    break;
+                                default:
+                                    if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                                            || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                                        parser.skipChildren();
+                                    }
+                                    break;
+                            }
+                        });
+                        break;
+                    default:
+                        if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                                || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                            parser.skipChildren();
+                        }
+                        break;
+                }
+            });
+            return Optional.of(builder.toCity());
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**

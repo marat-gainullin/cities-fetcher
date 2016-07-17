@@ -32,9 +32,9 @@ public final class CityBuilder {
      */
     private Double latitude;
     /**
-     * City's longtitude attribute.
+     * City's longitude attribute.
      */
-    private Double longtitude;
+    private Double longitude;
 
     /**
      * Adds id attribute to the builder.
@@ -81,13 +81,13 @@ public final class CityBuilder {
     }
 
     /**
-     * Adds longtitude attribute to the builder.
+     * Adds longitude attribute to the builder.
      *
-     * @param aValue aValue of longtitude attribute.
+     * @param aValue aValue of longitude attribute.
      * @return Underlying this {@code CityBuilder} instance.
      */
-    public CityBuilder longtitude(final double aValue) {
-        longtitude = aValue;
+    public CityBuilder longitude(final double aValue) {
+        longitude = aValue;
         return this;
     }
 
@@ -101,9 +101,9 @@ public final class CityBuilder {
         if (latitude == null) {
             throw new PartialCityJsonException("latitude");
         }
-        if (longtitude == null) {
-            throw new PartialCityJsonException("longtitude");
+        if (longitude == null) {
+            throw new PartialCityJsonException("longitude");
         }
-        return new City(id, name, type, latitude, longtitude);
+        return new City(id, name, type, latitude, longitude);
     }
 }

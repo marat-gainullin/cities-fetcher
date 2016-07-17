@@ -28,9 +28,9 @@ public final class City {
      */
     private final double latitude;
     /**
-     * Longtitude of the city. Citites can be searched by this property.
+     * longitude of the city. Citites can be searched by this property.
      */
-    private final double longtitude;
+    private final double longitude;
 
     /**
      * Constructor of {@code City} with all attributes.
@@ -39,15 +39,15 @@ public final class City {
      * @param aName A city's name.
      * @param aType A city's type.
      * @param aLatitude A city's laitude.
-     * @param aLongtitude A city's longtitude.
+     * @param alongitude A city's longitude.
      */
     public City(final long aId, final String aName, final String aType,
-            final double aLatitude, final double aLongtitude) {
+            final double aLatitude, final double alongitude) {
         id = aId;
         name = aName;
         type = aType;
         latitude = aLatitude;
-        longtitude = aLongtitude;
+        longitude = alongitude;
     }
 
     /**
@@ -91,8 +91,8 @@ public final class City {
      *
      * @return City's lontitude.
      */
-    public double getLongtitude() {
-        return longtitude;
+    public double getlongitude() {
+        return longitude;
     }
 
 }

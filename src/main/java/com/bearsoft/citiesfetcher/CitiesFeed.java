@@ -7,6 +7,7 @@ package com.bearsoft.citiesfetcher;
 
 import com.bearsoft.citiesfetcher.model.City;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Interface intended for using with feeds of cities, been read from some IO
@@ -22,5 +23,5 @@ public interface CitiesFeed {
      * @return {@code City} instance pulled from source.
      * @throws IOException
      */
-    public City pullNext() throws IOException;
+    public Optional<City> pull() throws IOException;
 }

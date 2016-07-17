@@ -23,17 +23,17 @@ public class SettingsTest {
     }
     
     @Test
-    public void whenOnlyCityQuoted() throws BadSettingsFormatException{
-        Settings settings = Settings.parse("\"Frankfurt am mein\"");
-        assertEquals("Frankfurt am mein", settings.getCityName());
-        assertEquals(Paths.get("~/Frankfurt am mein.csv"), settings.getDestination());
-    }
-    
-    @Test
     public void whenCityWithFile() throws BadSettingsFormatException{
         Settings settings = Settings.parse("Berlin", "-f" , "berlin-out.csv");
         assertEquals("Berlin", settings.getCityName());
         assertEquals(Paths.get("berlin-out.csv"), settings.getDestination());
+    }
+    
+    @Test(expected = BadSettingsFormatException.class)
+    public void whenExtraArguments() throws BadSettingsFormatException{
+        Settings settings = Settings.parse("Frankfurt", "am", "mein");
+        assertEquals("Frankfurt am mein", settings.getCityName());
+        assertEquals(Paths.get("~/Frankfurt am mein.csv"), settings.getDestination());
     }
     
     @Test(expected = BadSettingsFormatException.class)

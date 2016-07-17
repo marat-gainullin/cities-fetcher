@@ -1,6 +1,7 @@
 package com.bearsoft.citiesfetcher;
 
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -16,37 +17,46 @@ public class SettingsTest {
     /**
      * Tests a case when only one cargument present.
      *
-     * @throws BadSettingsFormatException
-     * if the exception is thrown in {@code Settings.parse()}.
+     * @throws BadSettingsFormatException if the exception is thrown in
+     * {@code Settings.parse()}.
+     * @throws UnsupportedEncodingException if unsupported encoding used
+     * somewhere in code.
      */
     @Test
-    public final void whenOnlyCity() throws BadSettingsFormatException {
+    public final void whenOnlyCity() throws BadSettingsFormatException,
+            UnsupportedEncodingException {
         Settings settings = Settings.parse("Berlin");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
-        assertEquals(Paths.get("Berlin.csv").toFile(), settings.getDestination());
+        assertEquals(new File("Berlin.csv"), settings.getDestination());
     }
 
     /**
      * Tests a case when file options is specified.
      *
-     * @throws BadSettingsFormatException
-     * if the exception is thrown in {@code Settings.parse()}.
+     * @throws BadSettingsFormatException if the exception is thrown in
+     * {@code Settings.parse()}.
+     * @throws UnsupportedEncodingException if unsupported encoding used
+     * somewhere in code.
      */
     @Test
-    public final void whenCityWithFile() throws BadSettingsFormatException {
+    public final void whenCityWithFile() throws BadSettingsFormatException,
+            UnsupportedEncodingException {
         Settings settings = Settings.parse("Berlin", "berlin-out.csv");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
-        assertEquals(Paths.get("berlin-out.csv").toFile(), settings.getDestination());
+        assertEquals(new File("berlin-out.csv"), settings.getDestination());
     }
 
     /**
      * Tests a case when extra arguments present.
      *
-     * @throws BadSettingsFormatException
-     * if the exception is thrown in {@code Settings.parse()}.
+     * @throws BadSettingsFormatException if the exception is thrown in
+     * {@code Settings.parse()}.
+     * @throws UnsupportedEncodingException if unsupported encoding used
+     * somewhere in code.
      */
     @Test(expected = BadSettingsFormatException.class)
-    public final void whenExtraArguments() throws BadSettingsFormatException {
+    public final void whenExtraArguments() throws BadSettingsFormatException,
+            UnsupportedEncodingException {
         Settings.parse("Frankfurt", "am", "mein");
     }
 }

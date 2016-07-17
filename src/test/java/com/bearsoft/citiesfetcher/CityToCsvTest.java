@@ -15,12 +15,12 @@ import static org.junit.Assert.assertEquals;
  *
  * @author mg
  */
-public class CityCsvTransformerTest {
+public class CityToCsvTest {
 
     @Test
     public void whenUnescapedTest() throws IOException {
         City item = new City(1, " Wonderful city", "location", -20.2, 54);
-        Supplier<StringBuilder> transformer = new CityCsvTransformer(item);
+        Supplier<StringBuilder> transformer = new CityToCsv(item);
         StringBuilder line = transformer.get();
         assertEquals("1, Wonderful city,location,-20.2,54\r\n", line.toString());
     }
@@ -28,7 +28,7 @@ public class CityCsvTransformerTest {
     @Test
     public void whenEscapedTest() throws IOException {
         City item = new City(1, "Wonderful, \"city\"", "loc\r\nation", -20.2, 54);
-        Supplier<StringBuilder> transformer = new CityCsvTransformer(item);
+        Supplier<StringBuilder> transformer = new CityToCsv(item);
         StringBuilder line = transformer.get();
         assertEquals("1,\"Wonderful, \"\"city\"\"\",\"location\",-20.2,54\r\n", line.toString());
     }

@@ -1,9 +1,9 @@
 package com.bearsoft.citiesfetcher.model;
 
 /**
- * This is a model class. Instances of this class can be read or written to
- * various sources or destinations. For example an inastcneof {@code City} can
- * be red from JSON and it can be written to CSV. This class is not for
+ * This is a model class. Instances of this class can be read or written to or
+ * from various sources or destinations. For example an inastcne of {@code City}
+ * can be red from JSON and it can be written to CSV. This class is not for
  * modification and so it has only final fields. Also it is not intended for
  * extension and so it is also final.
  *

@@ -7,6 +7,7 @@ package com.bearsoft.citiesfetcher.transforms;
 
 import com.bearsoft.citiesfetcher.model.City;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * Transforms a {@code City} instance to CSV line.
@@ -14,6 +15,16 @@ import java.util.function.Supplier;
  * @author mg
  */
 public class CityToCsv implements Supplier<StringBuilder> {
+
+    /**
+     * Pattern for discover if a value contains symbols to be escaped.
+     */
+    private static final Pattern ESCAPED_TEMPLATE
+            = Pattern.compile(".*[,\r\n\"].*", Pattern.DOTALL);
+    /**
+     * Pattern for escaping quotes with another quotes.
+     */
+    private static final Pattern QUOTES_TEMPLATE = Pattern.compile("\"");
 
     /**
      * {@code City} instance to be transformed to CSV line.
@@ -43,14 +54,36 @@ public class CityToCsv implements Supplier<StringBuilder> {
         builder
                 .append(data.getId())
                 .append(',')
-                .append(data.getName())
+                .append(escape(data.getName()))
                 .append(',')
-                .append(data.getType())
+                .append(escape(data.getType()))
                 .append(',')
                 .append(data.getLatitude())
                 .append(',')
-                .append(data.getLongtitude());
+                .append(data.getLongtitude())
+                .append('\r')
+                .append('\n');
         return builder;
     }
 
+    /**
+     * Escapes a value according to CSV specification. If a value contains
+     * quotes, commas, carrige returns or line feeds, it is enclosed in quotes.
+     * Alos, quotes are escaped with another quotes.
+     *
+     * @param aValue A value to be escaped.
+     * @return Escaped value.
+     */
+    private static StringBuilder escape(String aValue) {
+        if (ESCAPED_TEMPLATE.matcher(aValue).matches()) {
+            StringBuilder escaped = new StringBuilder();
+            escaped
+                    .append('\"')
+                    .append(QUOTES_TEMPLATE.matcher(aValue).replaceAll("\"\""))
+                    .append('\"');
+            return escaped;
+        } else {
+            return new StringBuilder(aValue);
+        }
+    }
 }

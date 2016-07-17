@@ -35,23 +35,17 @@ public final class JsonToCities implements CitiesFeed {
     private final JsonParser parser;
 
     /**
+     * Indicates whether we have started to traverse ajson array or not.
+     */
+    private boolean started;
+
+    /**
      * {code JsonToCity} transformer constructor.
      *
      * @param aParser {@code JsonParser} to used as json tokens source.
      */
     public JsonToCities(JsonParser aParser) {
         parser = aParser;
-    }
-
-    /**
-     * Json parser getter. It is used to determine what parser is used by this
-     * transformer.
-     *
-     * @return {@code JsonParser} instance.
-     * @see JsonParser
-     */
-    public JsonParser getParser() {
-        return parser;
     }
 
     /**
@@ -64,55 +58,78 @@ public final class JsonToCities implements CitiesFeed {
      */
     @Override
     public Optional<City> pull() throws IOException {
-        JsonToken objectStart = parser.nextToken();
-        if (objectStart != null) {
-            if (objectStart != JsonToken.START_OBJECT) {
-                throw new IOException("Json object expected.");
-            }
-            CityBuilder builder = new CityBuilder();
-            walkObject(() -> {
-                String fieldName = parser.getCurrentName();
-                switch (fieldName) {
-                    case "_id":
-                        builder.id(parser.getLongValue());
-                        break;
-                    case "name":
-                        builder.name(parser.getText());
-                        break;
-                    case "type":
-                        builder.type(parser.getText());
-                        break;
-                    case "geo_position":
-                        walkObject(() -> {
-                            String geoFieldName = parser.getCurrentName();
-                            switch (geoFieldName) {
-                                case "latitude":
-                                    builder.latitude(parser.getDoubleValue());
-                                    break;
-                                case "longitude":
-                                    builder.longitude(parser.getDoubleValue());
-                                    break;
-                                default:
-                                    if (parser.getCurrentToken() == JsonToken.START_OBJECT
-                                            || parser.getCurrentToken() == JsonToken.START_ARRAY) {
-                                        parser.skipChildren();
-                                    }
-                                    break;
-                            }
-                        });
-                        break;
-                    default:
-                        if (parser.getCurrentToken() == JsonToken.START_OBJECT
-                                || parser.getCurrentToken() == JsonToken.START_ARRAY) {
-                            parser.skipChildren();
-                        }
-                        break;
+        JsonToken start = parser.nextToken();
+        if (start != null) {
+            if (start == JsonToken.START_ARRAY) {
+                if (started) {
+                    throw new IOException(UNEXPECTED_ARRAY_MSG);
+                } else {
+                    started = true;
+                    return pull();
                 }
-            });
-            return Optional.of(builder.toCity());
+            } else if (!started) {
+                throw new IOException(ARRAY_EXPECTED_MSG);
+            }
+            switch (start) {
+                case END_ARRAY:
+                    return Optional.empty();
+                case START_OBJECT:
+                    return readObject();
+                default:
+                    throw new IOException(FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
+            }
         } else {
             return Optional.empty();
         }
+    }
+    private static final String ARRAY_EXPECTED_MSG = "Expected startof an array";
+    private static final String FINISH_OR_NEXT_OBJECT_EXPECTED_MSG
+            = "Expected end of array or next object start";
+    private static final String UNEXPECTED_ARRAY_MSG
+            = "Unexpected start of an array";
+
+    private Optional<City> readObject() throws IOException {
+        CityBuilder builder = new CityBuilder();
+        walkObject(() -> {
+            String fieldName = parser.getCurrentName();
+            switch (fieldName) {
+                case "_id":
+                    builder.id(parser.getLongValue());
+                    break;
+                case "name":
+                    builder.name(parser.getText());
+                    break;
+                case "type":
+                    builder.type(parser.getText());
+                    break;
+                case "geo_position":
+                    walkObject(() -> {
+                        String geoFieldName = parser.getCurrentName();
+                        switch (geoFieldName) {
+                            case "latitude":
+                                builder.latitude(parser.getDoubleValue());
+                                break;
+                            case "longitude":
+                                builder.longitude(parser.getDoubleValue());
+                                break;
+                            default:
+                                if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                                        || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                                    parser.skipChildren();
+                                }
+                                break;
+                        }
+                    });
+                    break;
+                default:
+                    if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                            || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                        parser.skipChildren();
+                    }
+                    break;
+            }
+        });
+        return Optional.of(builder.toCity());
     }
 
     /**

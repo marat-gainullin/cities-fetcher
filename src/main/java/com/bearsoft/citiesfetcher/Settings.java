@@ -78,13 +78,9 @@ public class Settings {
                 case ONLY_CITY_ARGS_LENGTH:
                     return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[0] + ".csv").toFile());
                 case WITH_FILE_ARGS_LENGTH:
-                    if ("-f".equals(args[1])) {
-                        return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[2]).toFile());
-                    } else {
-                        throw new BadSettingsFormatException();
-                    }
+                    return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[1]).toFile());
                 default:
-                    throw new BadSettingsFormatException();
+                    throw new BadSettingsFormatException("One argument \"CITY_NAME\" or two arguments \"CITY_NAME\" file-name.csv are expected.");
             }
         } catch (MalformedURLException ex) {
             throw new IllegalStateException(ex);
@@ -95,7 +91,7 @@ public class Settings {
      */
     private static final int ONLY_CITY_ARGS_LENGTH = 1;
     /**
-     * Arguments length expected if -f option is used.
+     * Arguments length expected if file-name option is used.
      */
-    private static final int WITH_FILE_ARGS_LENGTH = 3;
+    private static final int WITH_FILE_ARGS_LENGTH = 2;
 }

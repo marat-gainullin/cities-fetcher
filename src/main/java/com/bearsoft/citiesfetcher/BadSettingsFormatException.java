@@ -14,8 +14,10 @@ public class BadSettingsFormatException extends Exception {
 
     /**
      * The exception default constructor.
+     *
+     * @param aMessage An error message.
      */
-    public BadSettingsFormatException() {
-        super();
+    public BadSettingsFormatException(String aMessage) {
+        super(aMessage);
     }
 }

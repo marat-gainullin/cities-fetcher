@@ -34,21 +34,9 @@ public class SettingsTest {
      */
     @Test
     public final void whenCityWithFile() throws BadSettingsFormatException {
-        Settings settings = Settings.parse("Berlin", "-f", "berlin-out.csv");
+        Settings settings = Settings.parse("Berlin", "berlin-out.csv");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
         assertEquals(Paths.get("berlin-out.csv").toFile(), settings.getDestination());
-    }
-
-    /**
-     * Tests a case when file option goes without its value.
-     *
-     * @throws BadSettingsFormatException
-     * if the exception is thrown in {@code Settings.parse()}.
-     */
-    @Test(expected = BadSettingsFormatException.class)
-    public final void whenCityWithOrphanFileSwitch()
-            throws BadSettingsFormatException {
-        Settings.parse("Berlin", "-f");
     }
 
     /**

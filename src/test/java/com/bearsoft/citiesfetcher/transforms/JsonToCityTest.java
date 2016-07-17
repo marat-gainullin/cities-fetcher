@@ -39,7 +39,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         City read = transformer.get();
         assertEquals(45, read.getId());
         assertEquals("Dusseldorf", read.getName());
@@ -64,7 +64,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         City read = transformer.get();
         assertEquals(45, read.getId());
         assertEquals("Dusseldorf", read.getName());
@@ -89,7 +89,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         transformer.get();
     }
 
@@ -109,7 +109,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         transformer.get();
     }
 
@@ -130,7 +130,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         transformer.get();
     }
 
@@ -151,13 +151,13 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         transformer.get();
     }
 
     /**
-     * This is test for how {@code JsonToCity} handles absent geo_position
-     * field in first level object.
+     * This is test for how {@code JsonToCity} handles absent geo_position field
+     * in first level object.
      *
      * @throws IOException if Json parser throws it.
      */
@@ -172,7 +172,7 @@ public final class JsonToCityTest {
                 + ", location_id: 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToSity(parser);
+        Supplier<City> transformer = new JsonToCity(parser);
         transformer.get();
     }
 }

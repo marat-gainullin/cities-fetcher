@@ -1,26 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bearsoft.citiesfetcher.transforms;
 
+import com.bearsoft.citiesfetcher.CitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.function.Supplier;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test suite for JSON object to city transformation.
  *
  * @author mg
  */
-public final class JsonToCityTest {
+public final class JsonToCitiesTest {
 
     /**
      * This is simple test for {@code JsonToCity}.
@@ -31,16 +28,17 @@ public final class JsonToCityTest {
     public void whenJsonFullCity() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{_id: 45"
-                + ", name: 'Dusseldorf'"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {latitude: 80.5, longtitude: 120.8}"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        City read = transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        City read = transformer.pullNext();
         assertEquals(45, read.getId());
         assertEquals("Dusseldorf", read.getName());
         assertEquals("location", read.getType());
@@ -57,15 +55,16 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutType() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{_id: 45"
-                + ", name: 'Dusseldorf'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {latitude: 80.5, longtitude: 120.8}"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        City read = transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        City read = transformer.pullNext();
         assertEquals(45, read.getId());
         assertEquals("Dusseldorf", read.getName());
         assertNull(read.getType());
@@ -82,15 +81,16 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutName() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{_id: 45"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {latitude: 80.5, longtitude: 120.8}"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        transformer.pullNext();
     }
 
     /**
@@ -102,15 +102,16 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutId() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{name: 'Dusseldorf'"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {latitude: 80.5, longtitude: 120.8}"
-                + ", location_id: 377078"
+                + "{\"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        transformer.pullNext();
     }
 
     /**
@@ -122,16 +123,16 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutLatitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{id: 45"
-                + ", name: 'Dusseldorf'"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {longtitude: 120.8}"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\": {\"longtitude\": 120.8}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        transformer.pullNext();
     }
 
     /**
@@ -143,16 +144,16 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutLongtitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{id: 45"
-                + ", name: 'Dusseldorf'"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", geo_position: {latitude: 80.5}"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"geo_position\": {\"latitude\": 80.5}"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        transformer.pullNext();
     }
 
     /**
@@ -165,14 +166,14 @@ public final class JsonToCityTest {
     public void whenJsonCityWithoutGeoPosition() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{id: 45"
-                + ", name: 'Dusseldorf'"
-                + ", type: 'location'"
-                + ", iata_airport_code: null"
-                + ", location_id: 377078"
+                + "{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"location_id\": 377078"
                 + "}"
         ));
-        Supplier<City> transformer = new JsonToCity(parser);
-        transformer.get();
+        CitiesFeed transformer = new JsonToCities(parser);
+        transformer.pullNext();
     }
 }

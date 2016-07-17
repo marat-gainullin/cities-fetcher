@@ -6,12 +6,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import org.junit.Ignore;
 
 /**
  * Test suite for JSON object to city transformation.
@@ -45,12 +43,12 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        City read = transformer.pullNext();
-        assertEquals(45, read.getId());
-        assertEquals("Dusseldorf", read.getName());
-        assertEquals("location", read.getType());
-        assertEquals(80.5d, read.getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.getlongitude(), Double.MIN_VALUE);
+        Optional<City> read = transformer.pull();
+        assertEquals(45, read.get().getId());
+        assertEquals("Dusseldorf", read.get().getName());
+        assertEquals("location", read.get().getType());
+        assertEquals(80.5d, read.get().getLatitude(), Double.MIN_VALUE);
+        assertEquals(120.8d, read.get().getlongitude(), Double.MIN_VALUE);
     }
 
     /**
@@ -59,7 +57,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test
-    @Ignore
     public void whenJsonCityWithoutType() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -74,12 +71,12 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        City read = transformer.pullNext();
-        assertEquals(45, read.getId());
-        assertEquals("Dusseldorf", read.getName());
-        assertNull(read.getType());
-        assertEquals(80.5d, read.getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.getlongitude(), Double.MIN_VALUE);
+        Optional<City> read = transformer.pull();
+        assertEquals(45, read.get().getId());
+        assertEquals("Dusseldorf", read.get().getName());
+        assertNull(read.get().getType());
+        assertEquals(80.5d, read.get().getLatitude(), Double.MIN_VALUE);
+        assertEquals(120.8d, read.get().getlongitude(), Double.MIN_VALUE);
     }
 
     /**
@@ -88,7 +85,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    @Ignore
     public void whenJsonCityWithoutName() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -101,7 +97,7 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        transformer.pullNext();
+        transformer.pull();
     }
 
     /**
@@ -110,7 +106,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    @Ignore
     public void whenJsonCityWithoutId() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -123,7 +118,7 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        transformer.pullNext();
+        transformer.pull();
     }
 
     /**
@@ -132,7 +127,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    @Ignore
     public void whenJsonCityWithoutLatitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -145,7 +139,7 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        transformer.pullNext();
+        transformer.pull();
     }
 
     /**
@@ -154,7 +148,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    @Ignore
     public void whenJsonCityWithoutlongitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -167,7 +160,7 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        transformer.pullNext();
+        transformer.pull();
     }
 
     /**
@@ -177,7 +170,6 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    @Ignore
     public void whenJsonCityWithoutGeoPosition() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
@@ -189,6 +181,6 @@ public final class JsonToCitiesTest {
                 + "}"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
-        transformer.pullNext();
+        transformer.pull();
     }
 }

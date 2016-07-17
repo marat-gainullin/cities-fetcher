@@ -23,7 +23,7 @@ public class SettingsTest {
     public final void whenOnlyCity() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
-        assertEquals(Paths.get("Berlin.csv"), settings.getDestination());
+        assertEquals(Paths.get("Berlin.csv").toFile(), settings.getDestination());
     }
 
     /**
@@ -36,7 +36,7 @@ public class SettingsTest {
     public final void whenCityWithFile() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin", "-f", "berlin-out.csv");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
-        assertEquals(Paths.get("berlin-out.csv"), settings.getDestination());
+        assertEquals(Paths.get("berlin-out.csv").toFile(), settings.getDestination());
     }
 
     /**

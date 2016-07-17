@@ -5,8 +5,8 @@
  */
 package com.bearsoft.citiesfetcher;
 
+import com.bearsoft.citiesfetcher.model.City;
 import java.io.IOException;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -19,17 +19,17 @@ public class CityCsvTransformerTest {
 
     @Test
     public void whenUnescapedTest() throws IOException {
-        City item = new City(1, "Wonderful city", "location", -20.2, 54);
+        City item = new City(1, " Wonderful city", "location", -20.2, 54);
         Supplier<StringBuilder> transformer = new CityCsvTransformer(item);
         StringBuilder line = transformer.get();
-        assertEquals("1,Wonderful city,location,-20.2,54", line.toString());
+        assertEquals("1, Wonderful city,location,-20.2,54\r\n", line.toString());
     }
-    
+
     @Test
     public void whenEscapedTest() throws IOException {
         City item = new City(1, "Wonderful, \"city\"", "loc\r\nation", -20.2, 54);
         Supplier<StringBuilder> transformer = new CityCsvTransformer(item);
         StringBuilder line = transformer.get();
-        assertEquals("1,\"Wonderful, \"\"city\"\"\",\"location\",-20.2,54", line.toString());
+        assertEquals("1,\"Wonderful, \"\"city\"\"\",\"location\",-20.2,54\r\n", line.toString());
     }
 }

@@ -17,12 +17,25 @@ public final class CityToCsvTest {
      */
     @Test
     public void whenUnescapedTest() {
-        City item = new City(1, " Wonderful city", "location", -20.2d, 54d);
+        City item = new City(TEST_CITY_ID, " Wonderful city", "location",
+                TEST_LATITUDE, TEST_LONGITUDE);
         Function<City, StringBuilder> transformer = new CityToCsv();
         StringBuilder line = transformer.apply(item);
         assertEquals(
                 "1, Wonderful city,location,-20.2,54.0\r\n", line.toString());
     }
+    /**
+     * Test city id.
+     */
+    private static final int TEST_CITY_ID = 1;
+    /**
+     * Test latitude value.
+     */
+    private static final double TEST_LATITUDE = -20.2d;
+    /**
+     * Test longitude.
+     */
+    private static final double TEST_LONGITUDE = 54d;
 
     /**
      * Tests a case when symbols to escape found in values.
@@ -30,8 +43,9 @@ public final class CityToCsvTest {
     @Test
     public void whenEscapedTest() {
         City item = new City(
-                1,
-                "Wonderful, \"city\"", "loc\r\nation", -20.2d, 54d);
+                TEST_CITY_ID,
+                "Wonderful, \"city\"", "loc\r\nation",
+                TEST_LATITUDE, TEST_LONGITUDE);
         Function<City, StringBuilder> transformer = new CityToCsv();
         StringBuilder line = transformer.apply(item);
         assertEquals(
@@ -44,7 +58,8 @@ public final class CityToCsvTest {
      */
     @Test
     public void whenNullsTest() {
-        City item = new City(1, " Wonderful city", null, -20.2d, 54d);
+        City item = new City(TEST_CITY_ID, " Wonderful city", null,
+                TEST_LATITUDE, TEST_LONGITUDE);
         Function<City, StringBuilder> transformer = new CityToCsv();
         StringBuilder line = transformer.apply(item);
         assertEquals(

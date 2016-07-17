@@ -44,12 +44,26 @@ public final class JsonToCitiesTest {
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         Optional<City> read = transformer.pull();
-        assertEquals(45, read.get().getId());
+        assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
         assertEquals("location", read.get().getType());
-        assertEquals(80.5d, read.get().getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.get().getlongitude(), Double.MIN_VALUE);
+        assertEquals(TEST_LATITUDE, read.get().getLatitude(),
+                Double.MIN_VALUE);
+        assertEquals(TEST_LONGITUDE, read.get().getlongitude(),
+                Double.MIN_VALUE);
     }
+    /**
+     * Test city longitude.
+     */
+    private static final double TEST_LONGITUDE = 120.8d;
+    /**
+     * Test city latitude.
+     */
+    private static final double TEST_LATITUDE = 80.5d;
+    /**
+     * Test city id.
+     */
+    private static final int TEST_CITY_ID = 45;
 
     /**
      * This is test for how {@code JsonToCity} handles absent type field.
@@ -74,11 +88,13 @@ public final class JsonToCitiesTest {
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         Optional<City> read = transformer.pull();
-        assertEquals(45, read.get().getId());
+        assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
         assertNull(read.get().getType());
-        assertEquals(80.5d, read.get().getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.get().getlongitude(), Double.MIN_VALUE);
+        assertEquals(TEST_LATITUDE, read.get().getLatitude(),
+                Double.MIN_VALUE);
+        assertEquals(TEST_LONGITUDE, read.get().getlongitude(),
+                Double.MIN_VALUE);
     }
 
     /**

@@ -33,7 +33,7 @@ public final class JsonToCitiesTest {
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
-                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
                 + "}"
         ));
@@ -43,7 +43,7 @@ public final class JsonToCitiesTest {
         assertEquals("Dusseldorf", read.getName());
         assertEquals("location", read.getType());
         assertEquals(80.5d, read.getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.getLongtitude(), Double.MIN_VALUE);
+        assertEquals(120.8d, read.getlongitude(), Double.MIN_VALUE);
     }
 
     /**
@@ -57,9 +57,11 @@ public final class JsonToCitiesTest {
         JsonParser parser = factory.createParser(new StringReader(""
                 + "{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
+                + ", \"someObject\": {\"a\": true, \"b\": [5, 6, {\"r\": -4, \"s\": false}, 8]}"
+                + ", \"someArray\": [{\"a\":7, \"b\": [], \"c\": true}, {\"a\": true, \"b\": 78}]"
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
-                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
                 + "}"
         ));
@@ -69,7 +71,7 @@ public final class JsonToCitiesTest {
         assertEquals("Dusseldorf", read.getName());
         assertNull(read.getType());
         assertEquals(80.5d, read.getLatitude(), Double.MIN_VALUE);
-        assertEquals(120.8d, read.getLongtitude(), Double.MIN_VALUE);
+        assertEquals(120.8d, read.getlongitude(), Double.MIN_VALUE);
     }
 
     /**
@@ -85,7 +87,7 @@ public final class JsonToCitiesTest {
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
-                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
                 + "}"
         ));
@@ -106,7 +108,7 @@ public final class JsonToCitiesTest {
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
-                + "{\"latitude\": 80.5, \"longtitude\": 120.8}"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
                 + "}"
         ));
@@ -127,7 +129,7 @@ public final class JsonToCitiesTest {
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
-                + ", \"geo_position\": {\"longtitude\": 120.8}"
+                + ", \"geo_position\": {\"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
                 + "}"
         ));
@@ -136,12 +138,12 @@ public final class JsonToCitiesTest {
     }
 
     /**
-     * This is test for how {@code JsonToCity} handles absent longtitude field.
+     * This is test for how {@code JsonToCity} handles absent longitude field.
      *
      * @throws IOException if Json parser throws it.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutLongtitude() throws IOException {
+    public void whenJsonCityWithoutlongitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "{\"_id\": 45"

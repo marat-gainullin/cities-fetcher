@@ -6,6 +6,7 @@
 package com.bearsoft.citiesfetcher;
 
 import java.nio.file.Paths;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -15,28 +16,28 @@ import org.junit.Test;
 public class SettingsTest {
     
     @Test
-    public void whenOnlyCity(){
+    public void whenOnlyCity() throws BadSettingsFormatException{
         Settings settings = Settings.parse("Berlin");
-        assertEquals("Berlin", settings.getCity());
-        assertEquals(Paths.get("~/Berlin.csv"), settings.getPath());
+        assertEquals("Berlin", settings.getCityName());
+        assertEquals(Paths.get("~/Berlin.csv"), settings.getDestination());
     }
     
     @Test
-    public void whenOnlyCityQuoted(){
+    public void whenOnlyCityQuoted() throws BadSettingsFormatException{
         Settings settings = Settings.parse("\"Frankfurt am mein\"");
-        assertEquals("Frankfurt am mein", settings.getCity());
-        assertEquals(Paths.get("~/Frankfurt am mein.csv"), settings.getPath());
+        assertEquals("Frankfurt am mein", settings.getCityName());
+        assertEquals(Paths.get("~/Frankfurt am mein.csv"), settings.getDestination());
     }
     
     @Test
-    public void whenCityWithFile(){
+    public void whenCityWithFile() throws BadSettingsFormatException{
         Settings settings = Settings.parse("Berlin", "-f" , "berlin-out.csv");
-        assertEquals("Berlin", settings.getCity());
-        assertEquals(Paths.get("berlin-out.csv"), settings.getPath());
+        assertEquals("Berlin", settings.getCityName());
+        assertEquals(Paths.get("berlin-out.csv"), settings.getDestination());
     }
     
     @Test(expected = BadSettingsFormatException.class)
-    public void whenCityWithOrphanFileSwitch(){
-        Settings settings = Settings.parse("Berlin", "-f");
+    public void whenCityWithOrphanFileSwitch() throws BadSettingsFormatException{
+        Settings.parse("Berlin", "-f");
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bearsoft.citiesfetcher;
 
 import java.nio.file.Paths;
@@ -10,32 +5,59 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
+ * Test suite for {@code Settings}.
  *
  * @author mg
+ * @see Settings
  */
 public class SettingsTest {
 
+    /**
+     * Tests a case when only one cargument present.
+     *
+     * @throws BadSettingsFormatException
+     * if the exception is thrown in {@code Settings.parse()}.
+     */
     @Test
-    public void whenOnlyCity() throws BadSettingsFormatException {
+    public final void whenOnlyCity() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin");
         assertEquals("Berlin", settings.getCityName());
         assertEquals(Paths.get("Berlin.csv"), settings.getDestination());
     }
 
+    /**
+     * Tests a case when file options is specified.
+     *
+     * @throws BadSettingsFormatException
+     * if the exception is thrown in {@code Settings.parse()}.
+     */
     @Test
-    public void whenCityWithFile() throws BadSettingsFormatException {
+    public final void whenCityWithFile() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin", "-f", "berlin-out.csv");
         assertEquals("Berlin", settings.getCityName());
         assertEquals(Paths.get("berlin-out.csv"), settings.getDestination());
     }
 
+    /**
+     * Tests a case when file option goes without its value.
+     *
+     * @throws BadSettingsFormatException
+     * if the exception is thrown in {@code Settings.parse()}.
+     */
     @Test(expected = BadSettingsFormatException.class)
-    public void whenCityWithOrphanFileSwitch() throws BadSettingsFormatException {
+    public final void whenCityWithOrphanFileSwitch()
+            throws BadSettingsFormatException {
         Settings.parse("Berlin", "-f");
     }
 
+    /**
+     * Tests a case when extra arguments present.
+     *
+     * @throws BadSettingsFormatException
+     * if the exception is thrown in {@code Settings.parse()}.
+     */
     @Test(expected = BadSettingsFormatException.class)
-    public void whenExtraArguments() throws BadSettingsFormatException {
+    public final void whenExtraArguments() throws BadSettingsFormatException {
         Settings.parse("Frankfurt", "am", "mein");
     }
 }

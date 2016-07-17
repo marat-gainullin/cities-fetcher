@@ -18,11 +18,11 @@ public class CityToCsvTest {
      */
     @Test
     public final void whenUnescapedTest() {
-        City item = new City(1, " Wonderful city", "location", -20.2, 54);
+        City item = new City(1, " Wonderful city", "location", -20.2d, 54d);
         Supplier<StringBuilder> transformer = new CityToCsv(item);
         StringBuilder line = transformer.get();
         assertEquals(
-                "1, Wonderful city,location,-20.2,54\r\n", line.toString());
+                "1, Wonderful city,location,-20.2,54.0\r\n", line.toString());
     }
 
     /**
@@ -32,10 +32,10 @@ public class CityToCsvTest {
     public final void whenEscapedTest() {
         City item = new City(
                 1,
-                "Wonderful, \"city\"", "loc\r\nation", -20.2, 54);
+                "Wonderful, \"city\"", "loc\r\nation", -20.2d, 54d);
         Supplier<StringBuilder> transformer = new CityToCsv(item);
         StringBuilder line = transformer.get();
-        assertEquals("1,\"Wonderful, \"\"city\"\"\",\"location\",-20.2,54\r\n",
+        assertEquals("1,\"Wonderful, \"\"city\"\"\",\"loc\r\nation\",-20.2,54.0\r\n",
                 line.toString());
     }
 }

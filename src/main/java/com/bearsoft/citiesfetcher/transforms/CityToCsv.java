@@ -74,16 +74,20 @@ public class CityToCsv implements Supplier<StringBuilder> {
      * @param aValue A value to be escaped.
      * @return Escaped value.
      */
-    private static StringBuilder escape(String aValue) {
-        if (ESCAPED_TEMPLATE.matcher(aValue).matches()) {
-            StringBuilder escaped = new StringBuilder();
-            escaped
-                    .append('\"')
-                    .append(QUOTES_TEMPLATE.matcher(aValue).replaceAll("\"\""))
-                    .append('\"');
-            return escaped;
+    private static StringBuilder escape(final String aValue) {
+        if (aValue != null) {
+            if (ESCAPED_TEMPLATE.matcher(aValue).matches()) {
+                StringBuilder escaped = new StringBuilder();
+                escaped
+                        .append('\"')
+                        .append(QUOTES_TEMPLATE.matcher(aValue).replaceAll("\"\""))
+                        .append('\"');
+                return escaped;
+            } else {
+                return new StringBuilder(aValue);
+            }
         } else {
-            return new StringBuilder(aValue);
+            return new StringBuilder();
         }
     }
 }

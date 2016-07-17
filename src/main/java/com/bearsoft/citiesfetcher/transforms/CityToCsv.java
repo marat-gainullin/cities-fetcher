@@ -6,7 +6,7 @@
 package com.bearsoft.citiesfetcher.transforms;
 
 import com.bearsoft.citiesfetcher.model.City;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  *
  * @author mg
  */
-public class CityToCsv implements Supplier<StringBuilder> {
+public class CityToCsv implements Function<City, StringBuilder> {
 
     /**
      * Pattern for discover if a value contains symbols to be escaped.
@@ -27,40 +27,25 @@ public class CityToCsv implements Supplier<StringBuilder> {
     private static final Pattern QUOTES_TEMPLATE = Pattern.compile("\"");
 
     /**
-     * {@code City} instance to be transformed to CSV line.
-     *
-     * @see City
-     */
-    private final City data;
-
-    /**
-     * City to CSV tranformer constructor.
-     *
-     * @param aData A {@code City} instance to be transformed.
-     */
-    public CityToCsv(final City aData) {
-        data = aData;
-    }
-
-    /**
      * Transforms {@code City} instance to {@code StringBuilder}.
      *
+     * @param aCity instance to be transformed to CSV line.
      * @return {@code StringBuilder} instnce with data of th city transformed to
      * strings according to CSV specification.
      */
     @Override
-    public final StringBuilder get() {
+    public final StringBuilder apply(final City aCity) {
         StringBuilder builder = new StringBuilder();
         builder
-                .append(data.getId())
+                .append(aCity.getId())
                 .append(',')
-                .append(escape(data.getName()))
+                .append(escape(aCity.getName()))
                 .append(',')
-                .append(escape(data.getType()))
+                .append(escape(aCity.getType()))
                 .append(',')
-                .append(data.getLatitude())
+                .append(aCity.getLatitude())
                 .append(',')
-                .append(data.getLongtitude())
+                .append(aCity.getLongtitude())
                 .append('\r')
                 .append('\n');
         return builder;

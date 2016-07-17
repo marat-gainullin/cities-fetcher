@@ -2,6 +2,7 @@ package com.bearsoft.citiesfetcher;
 
 import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -21,7 +22,7 @@ public class SettingsTest {
     @Test
     public final void whenOnlyCity() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin");
-        assertEquals("Berlin", settings.getCityName());
+        assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
         assertEquals(Paths.get("Berlin.csv"), settings.getDestination());
     }
 
@@ -34,7 +35,7 @@ public class SettingsTest {
     @Test
     public final void whenCityWithFile() throws BadSettingsFormatException {
         Settings settings = Settings.parse("Berlin", "-f", "berlin-out.csv");
-        assertEquals("Berlin", settings.getCityName());
+        assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
         assertEquals(Paths.get("berlin-out.csv"), settings.getDestination());
     }
 

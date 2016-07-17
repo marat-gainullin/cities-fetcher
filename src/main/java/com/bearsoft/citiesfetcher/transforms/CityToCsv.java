@@ -80,7 +80,8 @@ public class CityToCsv implements Supplier<StringBuilder> {
                 StringBuilder escaped = new StringBuilder();
                 escaped
                         .append('\"')
-                        .append(QUOTES_TEMPLATE.matcher(aValue).replaceAll("\"\""))
+                        .append(QUOTES_TEMPLATE
+                                .matcher(aValue).replaceAll("\"\""))
                         .append('\"');
                 return escaped;
             } else {

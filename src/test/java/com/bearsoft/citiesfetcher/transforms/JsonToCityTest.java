@@ -20,8 +20,13 @@ import org.junit.Test;
  *
  * @author mg
  */
-public class JsonToCityTest {
+public final class JsonToCityTest {
 
+    /**
+     * This is simple test for {@code JsonToCity}.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test
     public void whenJsonFullCity() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -43,6 +48,11 @@ public class JsonToCityTest {
         assertEquals(120.8d, read.getLongtitude(), Double.MIN_VALUE);
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent type field.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test
     public void whenJsonCityWithoutType() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -63,6 +73,11 @@ public class JsonToCityTest {
         assertEquals(120.8d, read.getLongtitude(), Double.MIN_VALUE);
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent name field.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutName() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -78,6 +93,11 @@ public class JsonToCityTest {
         transformer.get();
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent id field.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutId() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -93,6 +113,11 @@ public class JsonToCityTest {
         transformer.get();
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent latitude field.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutLatitude() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -109,6 +134,11 @@ public class JsonToCityTest {
         transformer.get();
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent longtitude field.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutLongtitude() throws IOException {
         JsonFactory factory = new JsonFactory();
@@ -125,6 +155,12 @@ public class JsonToCityTest {
         transformer.get();
     }
 
+    /**
+     * This is test for how {@code JsonToCity} handles absent geo_position
+     * field in first level object.
+     *
+     * @throws IOException if Json parser throws it.
+     */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutGeoPosition() throws IOException {
         JsonFactory factory = new JsonFactory();

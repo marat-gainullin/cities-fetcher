@@ -8,7 +8,6 @@ package com.bearsoft.citiesfetcher;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +20,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class Settings {
 
+    /**
+     * GoEuro JSON API endpoint.
+     */
     private static final String ENDPOINT_TEMPLATE
             = "http://api.goeuro.com/api/v2/position/suggest/en/%s";
 
@@ -75,9 +77,10 @@ public class Settings {
      * @return Transformed name that can be used as a file name.
      */
     private static String fileName(final String aName) {
-        String name = aName.replaceAll("[\\s\\^#%&{}<>\\*\\? $!'\":@+`|=]", "_");
+        String name = aName.replaceAll(
+                "[\\s\\^#%&{}<>\\*\\? $!'\":@+`|=]", "_");
         name = name.replace('\\', '/').replace('/', File.separatorChar);
-        
+
         if (name.toLowerCase().endsWith(CSV_FILE_NAME_END)) {
             return name;
         } else {
@@ -98,7 +101,8 @@ public class Settings {
      * @return {@code Settings} instance initialized with parameters from
      * {@code args}.
      * @throws BadSettingsFormatException if some unexpected argument occured.
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException if code will use unsupported
+     * encoding while {@code URLEncoder.encode}
      */
     public static Settings parse(final String... args)
             throws BadSettingsFormatException, UnsupportedEncodingException {
@@ -106,7 +110,8 @@ public class Settings {
             if (args.length > 0) {
                 URL url = new URL(String.format(ENDPOINT_TEMPLATE,
                         URLEncoder.encode(args[0],
-                                StandardCharsets.UTF_8.name()).replace("+", "%20")));
+                                StandardCharsets.UTF_8.name())
+                        .replace("+", "%20")));
                 switch (args.length) {
                     case ONLY_CITY_ARGS_LENGTH:
                         return new Settings(url,

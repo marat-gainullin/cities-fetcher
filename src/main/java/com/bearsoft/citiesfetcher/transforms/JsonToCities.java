@@ -23,9 +23,17 @@ import java.util.Optional;
  */
 public final class JsonToCities implements CitiesFeed {
 
+    /**
+     * {@code Runnable} anlong interface with exceptions.
+     */
     @FunctionalInterface
     private interface ObjectWalker {
 
+        /**
+         * Walker callback method with exception.
+         *
+         * @throws IOException if a IO problem occures.
+         */
         void apply() throws IOException;
     }
 
@@ -44,7 +52,7 @@ public final class JsonToCities implements CitiesFeed {
      *
      * @param aParser {@code JsonParser} to used as json tokens source.
      */
-    public JsonToCities(JsonParser aParser) {
+    public JsonToCities(final JsonParser aParser) {
         parser = aParser;
     }
 
@@ -82,12 +90,31 @@ public final class JsonToCities implements CitiesFeed {
             return Optional.empty();
         }
     }
-    private static final String ARRAY_EXPECTED_MSG = "Expected startof an array";
+    /**
+     * Message for exception when frist token is not array start.
+     */
+    private static final String ARRAY_EXPECTED_MSG
+            = "Expected start of an array";
+    /**
+     * Message for exception when neither next object start, nor array end, but
+     * some another token occured while parsing objects at the midle of cities
+     * array.
+     */
     private static final String FINISH_OR_NEXT_OBJECT_EXPECTED_MSG
             = "Expected end of array or next object start";
+    /**
+     * Message for exception when array start token occured again after start of
+     * cities array.
+     */
     private static final String UNEXPECTED_ARRAY_MSG
             = "Unexpected start of an array";
 
+    /**
+     * Reads a object from json token stream.
+     *
+     * @return {code Optional<City>} instance.
+     * @throws IOException if a problem with IO occured.
+     */
     private Optional<City> readObject() throws IOException {
         CityBuilder builder = new CityBuilder();
         walkObject(() -> {
@@ -113,8 +140,10 @@ public final class JsonToCities implements CitiesFeed {
                                 builder.longitude(parser.getDoubleValue());
                                 break;
                             default:
-                                if (parser.getCurrentToken() == JsonToken.START_OBJECT
-                                        || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                                if (parser.getCurrentToken()
+                                        == JsonToken.START_OBJECT
+                                        || parser.getCurrentToken()
+                                        == JsonToken.START_ARRAY) {
                                     parser.skipChildren();
                                 }
                                 break;
@@ -122,8 +151,10 @@ public final class JsonToCities implements CitiesFeed {
                     });
                     break;
                 default:
-                    if (parser.getCurrentToken() == JsonToken.START_OBJECT
-                            || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+                    if (parser.getCurrentToken()
+                            == JsonToken.START_OBJECT
+                            || parser.getCurrentToken()
+                            == JsonToken.START_ARRAY) {
                         parser.skipChildren();
                     }
                     break;
@@ -137,10 +168,11 @@ public final class JsonToCities implements CitiesFeed {
      * doesn't support arrays, because implementation of full json logic here
      * would be over engineering.
      *
-     * @param aOnProperty
-     * @throws IOException
+     * @param aOnProperty {@code ObjectWalker} instance to be notified about
+     * properties.
+     * @throws IOException if a problem with IO occured.
      */
-    private void walkObject(ObjectWalker aOnProperty) throws IOException {
+    private void walkObject(final ObjectWalker aOnProperty) throws IOException {
         JsonToken token = parser.nextToken();
         while (token != JsonToken.END_OBJECT) {
             if (token != JsonToken.FIELD_NAME) {

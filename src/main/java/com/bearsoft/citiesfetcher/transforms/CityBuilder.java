@@ -91,6 +91,13 @@ public final class CityBuilder {
         return this;
     }
 
+    /**
+     * Build a {@code City} instanace with accumulated data.
+     *
+     * @return {@code City} instanace filled with accumulated data.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     */
     public City toCity() throws PartialCityJsonException {
         if (id == null) {
             throw new PartialCityJsonException("id");

@@ -17,7 +17,7 @@ public class BadSettingsFormatException extends Exception {
      *
      * @param aMessage An error message.
      */
-    public BadSettingsFormatException(String aMessage) {
+    public BadSettingsFormatException(final String aMessage) {
         super(aMessage);
     }
 }

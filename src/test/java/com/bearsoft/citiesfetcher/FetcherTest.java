@@ -10,7 +10,7 @@ import org.junit.Test;
  *
  * @author mg
  */
-public class FetcherTest {
+public final class FetcherTest {
 
     /**
      * Tests a case with simple city name.

@@ -21,7 +21,7 @@ public interface CitiesFeed {
      * Pulls some data from source and reads a {@code City} instance.
      *
      * @return {@code City} instance pulled from source.
-     * @throws IOException
+     * @throws IOException if any IO problem or Json problem occurs.
      */
-    public Optional<City> pull() throws IOException;
+    Optional<City> pull() throws IOException;
 }

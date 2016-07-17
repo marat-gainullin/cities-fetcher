@@ -28,8 +28,17 @@ import java.util.logging.Logger;
  */
 public class Fetcher {
 
+    /**
+     * Settings to be used by this {@code Fetcher}.
+     */
     private final Settings settings;
 
+    /**
+     * {@code Fetcher} with settings constructor.
+     *
+     * @param aSettings {@code Settings} instance for use by constructed
+     * {@code Fetcher}
+     */
     public Fetcher(final Settings aSettings) {
         settings = aSettings;
     }
@@ -41,14 +50,14 @@ public class Fetcher {
      * @throws IOException if some problem occurs while File IO or while Json
      * handling.
      */
-    public int work() throws IOException {
+    public final int work() throws IOException {
         HttpURLConnection connection = (HttpURLConnection) settings
                 .getCitySource().openConnection();
         try {
             connection.setRequestProperty("Accept", JSON_MIME_TYPE);
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String contentType = connection.getContentType();
-                String mimeAndEncoding[] = contentType.split(";");
+                String[] mimeAndEncoding = contentType.split(";");
                 if (JSON_MIME_TYPE.equalsIgnoreCase(mimeAndEncoding[0])) {
                     Charset charset;
                     if (mimeAndEncoding.length > 1
@@ -101,7 +110,7 @@ public class Fetcher {
      *
      * @param args Command line arguments array.
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             run(args);
         } catch (IOException ex) {
@@ -137,14 +146,32 @@ public class Fetcher {
         return fetched;
     }
 
+    /**
+     * Message about number of fetched cities.
+     */
     private static final String REPORT_MSG = "%d cities fetched.";
+    /**
+     * Message indicating, that server didn't send a content-type header.
+     */
     private static final String BAD_CONTENT_TYPE_MSG
             = "The endpoint server doesn't provide %s content type";
+    /**
+     * Message indicating, that server didn't send a charset information.
+     */
     private static final String MISSING_CHARSET_MSG
             = "The endpoint server doesn't provide charset information. "
             + "Falling to utf-8";
+    /**
+     * "charset=" prefix for content-type header value parsing.
+     */
     private static final String CHARSET_PREFIX = "charset=";
+    /**
+     * Jaon mime type name constant.
+     */
     private static final String JSON_MIME_TYPE = "application/json";
+    /**
+     * Command line help message.
+     */
     private static final String HELP_MSG = ""
             + "usage:\n"
             + "java -jar your-jar-file.jar CITY_NAME [file-name.csv]\n"

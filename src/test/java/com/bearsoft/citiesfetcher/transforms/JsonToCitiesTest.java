@@ -27,7 +27,7 @@ public final class JsonToCitiesTest {
     public void whenJsonFullCity() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
@@ -40,7 +40,7 @@ public final class JsonToCitiesTest {
                 + "{\"latitude\": 80.5, \"longitude\": 120.8,"
                 + " \"so\": {\"latitude\": 456}, \"sa\": [{},{}]}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         Optional<City> read = transformer.pull();
@@ -60,7 +60,7 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutType() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"someObject\": {\"a\": true, \"b\": [5, 6, {\"r\": -4, \"s\": false}, 8]}"
                 + ", \"someArray\": [{\"a\":7, \"b\": [], \"c\": true}, {\"a\": true, \"b\": 78}]"
@@ -68,7 +68,7 @@ public final class JsonToCitiesTest {
                 + ", \"geo_position\":"
                 + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         Optional<City> read = transformer.pull();
@@ -88,13 +88,13 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutName() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
                 + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         transformer.pull();
@@ -109,13 +109,13 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutId() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"name\": \"Dusseldorf\""
+                + "[{\"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\":"
                 + "{\"latitude\": 80.5, \"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         transformer.pull();
@@ -130,13 +130,13 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutLatitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\": {\"longitude\": 120.8}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         transformer.pull();
@@ -151,13 +151,13 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutlongitude() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"geo_position\": {\"latitude\": 80.5}"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         transformer.pull();
@@ -173,12 +173,12 @@ public final class JsonToCitiesTest {
     public void whenJsonCityWithoutGeoPosition() throws IOException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
-                + "{\"_id\": 45"
+                + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
                 + ", \"location_id\": 377078"
-                + "}"
+                + "}]"
         ));
         CitiesFeed transformer = new JsonToCities(parser);
         transformer.pull();

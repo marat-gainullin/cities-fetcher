@@ -10,7 +10,8 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
- * Transforms a {@code City} instance to CSV line.
+ * Transforms a {@code City} instance to CSV line. Every line ends with CRLF.
+ * According to CSV specification, last line may end or mat not end with CRLF.
  *
  * @author mg
  */

@@ -6,12 +6,15 @@
 package com.bearsoft.citiesfetcher;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
-import java.nio.file.Paths;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Settings containser. It is parsed from string array, e.g. from command line
+ * Settings container. It is parsed from string array, e.g. from command line
  * arguments.
  *
  * @author mg
@@ -36,6 +39,8 @@ public class Settings {
      *
      * @param aCitySource Url of cities source end point.
      * @param aDestination A path to output file.
+     * @see URL
+     * @see File
      */
     protected Settings(final URL aCitySource, final File aDestination) {
         super();
@@ -44,9 +49,10 @@ public class Settings {
     }
 
     /**
-     * City name getter.
+     * City source getter.
      *
-     * @return City name.
+     * @return City source URL.
+     * @see URL
      */
     public final URL getCitySource() {
         return citiesSource;
@@ -63,6 +69,28 @@ public class Settings {
     }
 
     /**
+     * Eliminates bad symbols from aname to make a valid filename.
+     *
+     * @param aName A name to be transformed.
+     * @return Transformed name that can be used as a file name.
+     */
+    private static String fileName(final String aName) {
+        String name = aName.replaceAll("[\\s\\^#%&{}<>\\*\\? $!'\":@+`|=]", "_");
+        name = name.replace('\\', '/').replace('/', File.separatorChar);
+        
+        if (name.toLowerCase().endsWith(CSV_FILE_NAME_END)) {
+            return name;
+        } else {
+            return name + CSV_FILE_NAME_END;
+        }
+    }
+
+    /**
+     * CSV file name end (.csv).
+     */
+    private static final String CSV_FILE_NAME_END = ".csv";
+
+    /**
      * Parses {@code args} array and instantiates {@code Settings} initialized
      * with values from {@code args}.
      *
@@ -70,22 +98,39 @@ public class Settings {
      * @return {@code Settings} instance initialized with parameters from
      * {@code args}.
      * @throws BadSettingsFormatException if some unexpected argument occured.
+     * @throws UnsupportedEncodingException
      */
     public static Settings parse(final String... args)
-            throws BadSettingsFormatException {
+            throws BadSettingsFormatException, UnsupportedEncodingException {
         try {
-            switch (args.length) {
-                case ONLY_CITY_ARGS_LENGTH:
-                    return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[0] + ".csv").toFile());
-                case WITH_FILE_ARGS_LENGTH:
-                    return new Settings(new URL(String.format(ENDPOINT_TEMPLATE, args[0])), Paths.get(args[1]).toFile());
-                default:
-                    throw new BadSettingsFormatException("One argument \"CITY_NAME\" or two arguments \"CITY_NAME\" file-name.csv are expected.");
+            if (args.length > 0) {
+                URL url = new URL(String.format(ENDPOINT_TEMPLATE,
+                        URLEncoder.encode(args[0],
+                                StandardCharsets.UTF_8.name()).replace("+", "%20")));
+                switch (args.length) {
+                    case ONLY_CITY_ARGS_LENGTH:
+                        return new Settings(url,
+                                new File(fileName(args[0])));
+                    case WITH_FILE_ARGS_LENGTH:
+                        return new Settings(url,
+                                new File(fileName(args[1])));
+                    default:
+                        throw new BadSettingsFormatException(
+                                ARGUMENTS_EXPECTED_MSG);
+                }
+            } else {
+                throw new BadSettingsFormatException(ARGUMENTS_EXPECTED_MSG);
             }
         } catch (MalformedURLException ex) {
             throw new IllegalStateException(ex);
         }
     }
+    /**
+     * Message displayed if no arguments paased or too much arguments passed.
+     */
+    private static final String ARGUMENTS_EXPECTED_MSG = ""
+            + "One argument \"CITY_NAME\" or two arguments \"CITY_NAME\" "
+            + "file-name.csv are expected.";
     /**
      * Arguments length expected if only city argument present.
      */

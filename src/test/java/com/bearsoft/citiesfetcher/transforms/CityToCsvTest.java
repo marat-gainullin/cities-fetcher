@@ -1,7 +1,6 @@
-package com.bearsoft.citiesfetcher;
+package com.bearsoft.citiesfetcher.transforms;
 
 import com.bearsoft.citiesfetcher.model.City;
-import com.bearsoft.citiesfetcher.transforms.CityToCsv;
 import java.util.function.Supplier;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -35,7 +34,21 @@ public class CityToCsvTest {
                 "Wonderful, \"city\"", "loc\r\nation", -20.2d, 54d);
         Supplier<StringBuilder> transformer = new CityToCsv(item);
         StringBuilder line = transformer.get();
-        assertEquals("1,\"Wonderful, \"\"city\"\"\",\"loc\r\nation\",-20.2,54.0\r\n",
+        assertEquals(
+                "1,\"Wonderful, \"\"city\"\"\",\"loc\r\nation\",-20.2,54.0\r\n",
                 line.toString());
     }
+    
+    /**
+     * Tests a case when nulls are present in values.
+     */
+    @Test
+    public final void whenNullsTest() {
+        City item = new City(1, " Wonderful city", null, -20.2d, 54d);
+        Supplier<StringBuilder> transformer = new CityToCsv(item);
+        StringBuilder line = transformer.get();
+        assertEquals(
+                "1, Wonderful city,,-20.2,54.0\r\n", line.toString());
+    }
+
 }

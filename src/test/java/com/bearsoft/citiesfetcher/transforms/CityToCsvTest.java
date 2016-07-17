@@ -1,7 +1,7 @@
 package com.bearsoft.citiesfetcher.transforms;
 
 import com.bearsoft.citiesfetcher.model.City;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -18,8 +18,8 @@ public final class CityToCsvTest {
     @Test
     public void whenUnescapedTest() {
         City item = new City(1, " Wonderful city", "location", -20.2d, 54d);
-        Supplier<StringBuilder> transformer = new CityToCsv(item);
-        StringBuilder line = transformer.get();
+        Function<City, StringBuilder> transformer = new CityToCsv();
+        StringBuilder line = transformer.apply(item);
         assertEquals(
                 "1, Wonderful city,location,-20.2,54.0\r\n", line.toString());
     }
@@ -32,8 +32,8 @@ public final class CityToCsvTest {
         City item = new City(
                 1,
                 "Wonderful, \"city\"", "loc\r\nation", -20.2d, 54d);
-        Supplier<StringBuilder> transformer = new CityToCsv(item);
-        StringBuilder line = transformer.get();
+        Function<City, StringBuilder> transformer = new CityToCsv();
+        StringBuilder line = transformer.apply(item);
         assertEquals(
                 "1,\"Wonderful, \"\"city\"\"\",\"loc\r\nation\",-20.2,54.0\r\n",
                 line.toString());
@@ -45,8 +45,8 @@ public final class CityToCsvTest {
     @Test
     public void whenNullsTest() {
         City item = new City(1, " Wonderful city", null, -20.2d, 54d);
-        Supplier<StringBuilder> transformer = new CityToCsv(item);
-        StringBuilder line = transformer.get();
+        Function<City, StringBuilder> transformer = new CityToCsv();
+        StringBuilder line = transformer.apply(item);
         assertEquals(
                 "1, Wonderful city,,-20.2,54.0\r\n", line.toString());
     }

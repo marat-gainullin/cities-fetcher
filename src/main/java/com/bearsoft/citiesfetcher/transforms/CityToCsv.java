@@ -10,26 +10,35 @@ import java.util.function.Supplier;
 
 /**
  * Transforms a {@code City} instance to CSV line.
+ *
  * @author mg
  */
 public class CityToCsv implements Supplier<StringBuilder> {
 
     /**
      * {@code City} instance to be transformed to CSV line.
+     *
      * @see City
      */
     private final City data;
-    
+
     /**
      * City to CSV tranformer constructor.
-     * @param aData 
+     *
+     * @param aData A {@code City} instance to be transformed.
      */
-    public CityToCsv(City aData) {
+    public CityToCsv(final City aData) {
         data = aData;
     }
 
+    /**
+     * Transforms {@code City} instance to {@code StringBuilder}.
+     *
+     * @return {@code StringBuilder} instnce with data of th city transformed to
+     * strings according to CSV specification.
+     */
     @Override
-    public StringBuilder get() {
+    public final StringBuilder get() {
         StringBuilder builder = new StringBuilder();
         builder
                 .append(data.getId())
@@ -43,5 +52,5 @@ public class CityToCsv implements Supplier<StringBuilder> {
                 .append(data.getLongtitude());
         return builder;
     }
-    
+
 }

@@ -35,13 +35,14 @@ public final class City {
     /**
      * Constructor of {@code City} with all attributes.
      *
-     * @param aId
-     * @param aName
-     * @param aType
-     * @param aLatitude
-     * @param aLongtitude
+     * @param aId A city's identifier.
+     * @param aName A city's name.
+     * @param aType A city's type.
+     * @param aLatitude A city's laitude.
+     * @param aLongtitude A city's longtitude.
      */
-    public City(long aId, String aName, String aType, double aLatitude, double aLongtitude) {
+    public City(final long aId, final String aName, final String aType,
+            final double aLatitude, final double aLongtitude) {
         id = aId;
         name = aName;
         type = aType;

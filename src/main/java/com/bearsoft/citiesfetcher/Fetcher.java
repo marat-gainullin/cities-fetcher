@@ -4,15 +4,11 @@ import com.bearsoft.citiesfetcher.feed.CitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
 import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
 import com.bearsoft.citiesfetcher.model.PartialCityJsonException;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -82,10 +78,8 @@ public class Fetcher {
                                     new FileOutputStream(
                                             settings
                                             .getDestination()))) {
-                        Reader reader = new InputStreamReader(body, charset);
-                        JsonFactory jsonFactory = new JsonFactory();
-                        JsonParser parser = jsonFactory.createParser(reader);
-                        CitiesFeed feed = new JsonCitiesFeed(parser);
+                        
+                        CitiesFeed feed = JsonCitiesFeed.create(body, charset);
 
                         Optional<City> city = feed.pull();
                         while (city.isPresent()) {

@@ -2,7 +2,7 @@ package com.bearsoft.citiesfetcher.model;
 
 /**
  * This exception is intended to be thrown by reader code when it discovers a
- * mandatory fields absence in input json.
+ * mandatory fields absence in input Json.
  *
  * @author mg
  */

@@ -3,8 +3,6 @@ package com.bearsoft.citiesfetcher.feed;
 import com.bearsoft.citiesfetcher.model.PartialCityJsonException;
 import com.bearsoft.citiesfetcher.JsonCitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Optional;
@@ -32,8 +30,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonFullCity() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -49,7 +46,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         Optional<City> read = transformer.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
@@ -85,8 +81,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCityWithoutType() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"someObject\": {\"a\": true,"
@@ -99,7 +94,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         Optional<City> read = transformer.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
@@ -123,8 +117,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCityWithoutName() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
@@ -133,7 +126,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -150,8 +142,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCityWithoutId() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
@@ -160,7 +151,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -178,8 +168,7 @@ public final class JsonCitiesFeedTest {
             
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -188,7 +177,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -205,8 +193,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCityWithoutlongitude() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -215,7 +202,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -233,8 +219,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCityWithoutGeoPosition() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new StringReader(""
+        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -242,7 +227,6 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 }

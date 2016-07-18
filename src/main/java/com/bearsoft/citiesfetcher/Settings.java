@@ -100,7 +100,7 @@ public class Settings {
      * @param args String arguments array to be parsed.
      * @return {@code Settings} instance initialized with parameters from
      * {@code args}.
-     * @throws BadArgumentsException if some unexpected argument occured.
+     * @throws BadArgumentsException if some unexpected argument occurred.
      * @throws UnsupportedEncodingException if code will use unsupported
      * encoding while {@code URLEncoder.encode}
      */

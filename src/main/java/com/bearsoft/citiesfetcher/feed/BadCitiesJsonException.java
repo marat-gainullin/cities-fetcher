@@ -7,7 +7,7 @@ package com.bearsoft.citiesfetcher.feed;
 
 /**
  * This exception is thrown when {@code CitiesFeed} discovers some bad sequence
- * of object starts/ends or json array starts/ends.
+ * of object starts/ends or Json array starts/ends.
  *
  * @author mg
  */

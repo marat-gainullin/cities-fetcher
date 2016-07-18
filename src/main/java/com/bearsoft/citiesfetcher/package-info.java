@@ -1,5 +1,5 @@
 /**
  * Cities fetcher base package. It consists of main class, settings parser,
- * CSV converter class and json cities feed, etc.
+ * CSV converter class and Json cities feed, etc.
  */
 package com.bearsoft.citiesfetcher;

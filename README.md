@@ -8,7 +8,7 @@ Since Java 8 is installed, everything is ready to fetch cities.
 ## Build
 To build the fetcher you need Maven. Cd into a folder of the project and type `mvn clean package` on the command line.
 
-To vew code coverage report after `maven clean package` has been executed, go to `target/site/jacoco` subfolder and view `index.html` file in this subfolder with your browser.
+To view code coverage report after `maven clean package` has been executed, go to `target/site/jacoco` subfolder and view `index.html` file in this subfolder with your browser.
 
 To generate project reports (FindBugs, CMD, PMD and CheckStyle), cd into a folder of the project and type `mvn site` on the command line.
 

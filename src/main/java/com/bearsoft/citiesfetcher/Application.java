@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author mg
  */
-public class Fetcher {
+public class Application {
 
     /**
      * Settings to be used by this {@code Fetcher}.
@@ -35,7 +35,7 @@ public class Fetcher {
      * @param aSettings {@code Settings} instance for use by constructed
      * {@code Fetcher}
      */
-    public Fetcher(final Settings aSettings) {
+    public Application(final Settings aSettings) {
         settings = aSettings;
     }
 
@@ -98,7 +98,7 @@ public class Fetcher {
             charset = Charset.forName(
                     contentTypeTail.substring(CHARSET_PREFIX.length()));
         } else {
-            Logger.getLogger(Fetcher.class.getName())
+            Logger.getLogger(Application.class.getName())
                     .log(Level.WARNING, MISSING_CHARSET_MSG);
             charset = StandardCharsets.UTF_8;
         }
@@ -152,13 +152,13 @@ public class Fetcher {
         try {
             run(args);
         } catch (IOException ex) {
-            Logger.getLogger(Fetcher.class.getName())
+            Logger.getLogger(Application.class.getName())
                     .log(Level.SEVERE, ex.getMessage());
         } catch (BadArgumentsException ex) {
             System.out.println(ex.getMessage());
             System.out.println();
             System.out.println(HELP_MSG);
-        } catch (BadCitiesJsonException | PartialCityJsonException ex) {
+        } catch (BadCitiesJsonException | PartialCityJsonException | FileAlreadyExistsException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -175,13 +175,19 @@ public class Fetcher {
      * absent.
      * @throws BadCitiesJsonException if some bad structure discovered while
      * parsing process.
+     * @throws FileAlreadyExistsException if file we have to write to already
+     * exists.
      */
     public static int run(final String[] args) throws IOException,
             BadArgumentsException,
             PartialCityJsonException,
-            BadCitiesJsonException {
+            BadCitiesJsonException,
+            FileAlreadyExistsException {
         Settings settings = Settings.parse(args);
-        Fetcher fetcher = new Fetcher(settings);
+        if (settings.getDestination().exists()) {
+            throw new FileAlreadyExistsException(settings.getDestination());
+        }
+        Application fetcher = new Application(settings);
         int fetched = fetcher.fetch();
         System.out.println(WRITTEN_FILE_NSG);
         System.out.println(settings.getDestination().getAbsolutePath());

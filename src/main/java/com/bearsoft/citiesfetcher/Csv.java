@@ -53,7 +53,7 @@ public final class Csv {
 
     /**
      * Escapes a value according to CSV specification. If a value contains
-     * quotes, commas, carrige returns or line feeds, it is enclosed in quotes.
+     * quotes, commas, carriage returns or line feeds, it is enclosed in quotes.
      * Also, quotes are escaped with another quotes.
      *
      * @param aValue A value to be escaped.

@@ -99,7 +99,9 @@ public class Fetcher {
     }
 
     /**
-     * Fetches all available cities from a connection to an endpoint.
+     * Fetches all available cities from a connection to an endpoint. It takes
+     * into account charset of http response while reading cities, but
+     * destination file is written in utf-8.
      *
      * @param aConnection A connection to fetch from.
      * @return Number of cities fetched.

@@ -51,7 +51,7 @@ public final class JsonCitiesFeed implements CitiesFeed {
     private final JsonParser parser;
 
     /**
-     * {code JsonToCity} transformer constructor.
+     * {code JsonCitiesFeed} transformer constructor.
      *
      * @param aParser {@code JsonParser} to used as Json tokens source.
      */
@@ -75,21 +75,14 @@ public final class JsonCitiesFeed implements CitiesFeed {
     public Optional<City> pull() throws IOException,
             PartialCityJsonException, BadCitiesJsonException {
         JsonToken start = parser.nextToken();
-        if (start != null) {
-            if (start == JsonToken.START_ARRAY) {
-                throw new BadCitiesJsonException(UNEXPECTED_ARRAY_MSG);
-            }
-            switch (start) {
-                case END_ARRAY:
-                    return Optional.empty();
-                case START_OBJECT:
-                    return readObject();
-                default:
-                    throw new BadCitiesJsonException(
-                            FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
-            }
-        } else {
-            return Optional.empty();
+        switch (start) {
+            case END_ARRAY:
+                return Optional.empty();
+            case START_OBJECT:
+                return readObject();
+            default:
+                throw new BadCitiesJsonException(
+                        FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
         }
     }
     /**
@@ -104,12 +97,6 @@ public final class JsonCitiesFeed implements CitiesFeed {
      */
     private static final String FINISH_OR_NEXT_OBJECT_EXPECTED_MSG
             = "Expected end of array or next object start";
-    /**
-     * Message for exception when array start token occurred again after start
-     * of cities array.
-     */
-    private static final String UNEXPECTED_ARRAY_MSG
-            = "Unexpected start of an array";
 
     /**
      * Reads a object from Json token stream.
@@ -145,27 +132,30 @@ public final class JsonCitiesFeed implements CitiesFeed {
                                 builder.longitude(parser.getDoubleValue());
                                 break;
                             default:
-                                if (parser.getCurrentToken()
-                                        == JsonToken.START_OBJECT
-                                        || parser.getCurrentToken()
-                                        == JsonToken.START_ARRAY) {
-                                    parser.skipChildren();
-                                }
+                                skipObjectOrArray();
                                 break;
                         }
                     });
                     break;
                 default:
-                    if (parser.getCurrentToken()
-                            == JsonToken.START_OBJECT
-                            || parser.getCurrentToken()
-                            == JsonToken.START_ARRAY) {
-                        parser.skipChildren();
-                    }
+                    skipObjectOrArray();
                     break;
             }
         });
         return Optional.of(builder.toCity());
+    }
+
+    /**
+     * Skips current object or array. Stops on {@code JsonToken.END_OBJECT} or
+     * {@code JsonToken.END_ARRAY} token.
+     *
+     * @throws IOException if a problem with IO occurred.
+     */
+    private void skipObjectOrArray() throws IOException {
+        if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                || parser.getCurrentToken() == JsonToken.START_ARRAY) {
+            parser.skipChildren();
+        }
     }
 
     /**

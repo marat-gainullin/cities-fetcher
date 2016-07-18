@@ -31,6 +31,8 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <finalName>GoEuroTest</finalName>  
+                    <appendAssemblyId>false</appendAssemblyId>                  
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

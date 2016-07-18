@@ -57,6 +57,6 @@ public class SettingsTest {
     @Test(expected = BadArgumentsException.class)
     public final void whenExtraArguments() throws BadArgumentsException,
             UnsupportedEncodingException {
-        Settings.parse("Frankfurt", "am", "mein");
+        Settings.parse("Frankfurt", "am", "Main");
     }
 }

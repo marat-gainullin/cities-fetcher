@@ -222,18 +222,18 @@ public class Application {
      */
     private static final String CHARSET_PREFIX = ";charset=";
     /**
-     * Jaon mime type name constant.
+     * Json mime type name constant.
      */
     private static final String JSON_MIME_TYPE = "application/json";
     /**
      * Command line help message.
      */
     private static final String HELP_MSG = ""
-            + "usage:\n"
-            + "java -jar your-jar-file.jar CITY_NAME [file-name.csv]\n"
+            + "usage:\n\n"
+            + "java -jar your-jar-file.jar CITY_NAME [file-name.csv]\n\n"
             + "CITY_NAME - The city name template to narrow the search.\n"
-            + "file-name - File, fetched cities to be written to. Optional.\n"
+            + "file-name.csv - File, fetched cities to be written to. Optional.\n\n"
             + "If CITY_NAME contains spaces, enclose it in qoutes please.\n"
-            + "For example: "
-            + "java -jar your-jar-file.jar \"Frankfurt am mein\"";
+            + "For example:\n"
+            + "java -jar your-jar-file.jar \"Frankfurt am Main\"";
 }

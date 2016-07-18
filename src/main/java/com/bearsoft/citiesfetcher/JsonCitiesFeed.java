@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bearsoft.citiesfetcher.transforms;
+package com.bearsoft.citiesfetcher;
 
-import com.bearsoft.citiesfetcher.CitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
+import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
+import com.bearsoft.citiesfetcher.feed.CitiesFeed;
+import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
@@ -14,20 +16,21 @@ import java.util.Optional;
 
 /**
  * Json to city transformer. Transforms a part of json tokens stream from
- * {@code JsonParser} to {@code City} instnace. It can be called multiple times
- * for pulling data of various cities from json.
+ * {@code JsonParser} to {@code City} instance. It can be called multiple times
+ * for pulling data of consecutive cities from json tokens stream. This class is
+ * here because of it makes us free to use only 'jackson-core' library.
  *
  * @author mg
  * @see City
  * @see JsonParser
  */
-public final class JsonToCities implements CitiesFeed {
+public final class JsonCitiesFeed implements CitiesFeed {
 
     /**
-     * {@code Runnable} anlong interface with exceptions.
+     * A {@code Runnable} like interface with exceptions.
      */
     @FunctionalInterface
-    private interface ObjectWalker {
+    private interface Callback {
 
         /**
          * Walker callback method with exception.
@@ -43,7 +46,7 @@ public final class JsonToCities implements CitiesFeed {
     private final JsonParser parser;
 
     /**
-     * Indicates whether we have started to traverse ajson array or not.
+     * Indicates whether we have started to traverse a json array or not.
      */
     private boolean started;
 
@@ -52,7 +55,7 @@ public final class JsonToCities implements CitiesFeed {
      *
      * @param aParser {@code JsonParser} to used as json tokens source.
      */
-    public JsonToCities(final JsonParser aParser) {
+    public JsonCitiesFeed(final JsonParser aParser) {
         parser = aParser;
     }
 
@@ -60,23 +63,28 @@ public final class JsonToCities implements CitiesFeed {
      * Pulls object tokens and reads {@code City} instance from underlying json
      * parser.
      *
-     * @return {@code City} instance, read fron json tokens stream.
+     * @return {@code City} instance, read from json tokens stream.
      * @throws IOException if city information is not complete or if low level
      * {@code IOException} is thrown.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Override
-    public Optional<City> pull() throws IOException {
+    public Optional<City> pull() throws IOException,
+            PartialCityJsonException, BadCitiesJsonException {
         JsonToken start = parser.nextToken();
         if (start != null) {
             if (start == JsonToken.START_ARRAY) {
                 if (started) {
-                    throw new IOException(UNEXPECTED_ARRAY_MSG);
+                    throw new BadCitiesJsonException(UNEXPECTED_ARRAY_MSG);
                 } else {
                     started = true;
                     return pull();
                 }
             } else if (!started) {
-                throw new IOException(ARRAY_EXPECTED_MSG);
+                throw new BadCitiesJsonException(ARRAY_EXPECTED_MSG);
             }
             switch (start) {
                 case END_ARRAY:
@@ -84,7 +92,7 @@ public final class JsonToCities implements CitiesFeed {
                 case START_OBJECT:
                     return readObject();
                 default:
-                    throw new IOException(FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
+                    throw new BadCitiesJsonException(FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
             }
         } else {
             return Optional.empty();
@@ -97,7 +105,7 @@ public final class JsonToCities implements CitiesFeed {
             = "Expected start of an array";
     /**
      * Message for exception when neither next object start, nor array end, but
-     * some another token occured while parsing objects at the midle of cities
+     * some another token occured while parsing objects at the middle of cities
      * array.
      */
     private static final String FINISH_OR_NEXT_OBJECT_EXPECTED_MSG
@@ -114,9 +122,12 @@ public final class JsonToCities implements CitiesFeed {
      *
      * @return {code Optional<City>} instance.
      * @throws IOException if a problem with IO occured.
+     * @throws PartialCityJsonException if some mandatory fields of {@code City}
+     * are missing.
      */
-    private Optional<City> readObject() throws IOException {
-        CityBuilder builder = new CityBuilder();
+    private Optional<City> readObject() throws IOException,
+            PartialCityJsonException {
+        City.Builder builder = new City.Builder();
         walkObject(() -> {
             String fieldName = parser.getCurrentName();
             switch (fieldName) {
@@ -172,7 +183,7 @@ public final class JsonToCities implements CitiesFeed {
      * properties.
      * @throws IOException if a problem with IO occured.
      */
-    private void walkObject(final ObjectWalker aOnProperty) throws IOException {
+    private void walkObject(final Callback aOnProperty) throws IOException {
         JsonToken token = parser.nextToken();
         while (token != JsonToken.END_OBJECT) {
             if (token != JsonToken.FIELD_NAME) {

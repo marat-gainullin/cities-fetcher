@@ -1,6 +1,9 @@
-package com.bearsoft.citiesfetcher.transforms;
+package com.bearsoft.citiesfetcher.feed;
 
-import com.bearsoft.citiesfetcher.CitiesFeed;
+import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
+import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
+import com.bearsoft.citiesfetcher.feed.CitiesFeed;
+import com.bearsoft.citiesfetcher.JsonCitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,13 +13,15 @@ import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test suite for JSON object to city transformation.
  *
  * @author mg
  */
-public final class JsonToCitiesTest {
+public final class JsonCitiesFeedTest {
 
     /**
      * This is simple test for {@code JsonToCity}.
@@ -24,10 +29,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test
     public void whenJsonFullCity() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -45,7 +53,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         Optional<City> read = transformer.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
@@ -74,10 +82,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test
     public void whenJsonCityWithoutType() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -92,7 +103,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         Optional<City> read = transformer.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
@@ -109,10 +120,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutName() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -123,7 +137,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -133,10 +147,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutId() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"name\": \"Dusseldorf\""
@@ -147,7 +164,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -157,11 +174,14 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutLatitude() throws IOException,
             
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -172,7 +192,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -182,10 +202,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutlongitude() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -196,7 +219,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 
@@ -207,10 +230,13 @@ public final class JsonToCitiesTest {
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutGeoPosition() throws IOException,
-            PartialCityJsonException {
+            PartialCityJsonException,
+            BadCitiesJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -220,7 +246,7 @@ public final class JsonToCitiesTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        CitiesFeed transformer = new JsonToCities(parser);
+        CitiesFeed transformer = new JsonCitiesFeed(parser);
         transformer.pull();
     }
 }

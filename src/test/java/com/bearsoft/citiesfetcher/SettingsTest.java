@@ -17,13 +17,13 @@ public class SettingsTest {
     /**
      * Tests a case when only one cargument present.
      *
-     * @throws BadSettingsFormatException if the exception is thrown in
+     * @throws BadArgumentsException if the exception is thrown in
      * {@code Settings.parse()}.
      * @throws UnsupportedEncodingException if unsupported encoding used
      * somewhere in code.
      */
     @Test
-    public final void whenOnlyCity() throws BadSettingsFormatException,
+    public final void whenOnlyCity() throws BadArgumentsException,
             UnsupportedEncodingException {
         Settings settings = Settings.parse("Berlin");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
@@ -33,13 +33,13 @@ public class SettingsTest {
     /**
      * Tests a case when file options is specified.
      *
-     * @throws BadSettingsFormatException if the exception is thrown in
+     * @throws BadArgumentsException if the exception is thrown in
      * {@code Settings.parse()}.
      * @throws UnsupportedEncodingException if unsupported encoding used
      * somewhere in code.
      */
     @Test
-    public final void whenCityWithFile() throws BadSettingsFormatException,
+    public final void whenCityWithFile() throws BadArgumentsException,
             UnsupportedEncodingException {
         Settings settings = Settings.parse("Berlin", "berlin-out.csv");
         assertTrue(settings.getCitySource().getPath().endsWith("Berlin"));
@@ -49,13 +49,13 @@ public class SettingsTest {
     /**
      * Tests a case when extra arguments present.
      *
-     * @throws BadSettingsFormatException if the exception is thrown in
+     * @throws BadArgumentsException if the exception is thrown in
      * {@code Settings.parse()}.
      * @throws UnsupportedEncodingException if unsupported encoding used
      * somewhere in code.
      */
-    @Test(expected = BadSettingsFormatException.class)
-    public final void whenExtraArguments() throws BadSettingsFormatException,
+    @Test(expected = BadArgumentsException.class)
+    public final void whenExtraArguments() throws BadArgumentsException,
             UnsupportedEncodingException {
         Settings.parse("Frankfurt", "am", "mein");
     }

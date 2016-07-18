@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bearsoft.citiesfetcher.transforms;
+package com.bearsoft.citiesfetcher;
 
 import com.bearsoft.citiesfetcher.model.City;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
  *
  * @author mg
  */
-public class CityToCsv implements Function<City, StringBuilder> {
+public class Csv {
 
     /**
      * Pattern for discover if a value contains symbols to be escaped.
@@ -31,11 +30,10 @@ public class CityToCsv implements Function<City, StringBuilder> {
      * Transforms {@code City} instance to {@code StringBuilder}.
      *
      * @param aCity instance to be transformed to CSV line.
-     * @return {@code StringBuilder} instnce with data of th city transformed to
+     * @return {@code StringBuilder} instance with data of th city transformed to
      * strings according to CSV specification.
      */
-    @Override
-    public final StringBuilder apply(final City aCity) {
+    public static StringBuilder to(final City aCity) {
         StringBuilder builder = new StringBuilder();
         builder
                 .append(aCity.getId())
@@ -55,7 +53,7 @@ public class CityToCsv implements Function<City, StringBuilder> {
     /**
      * Escapes a value according to CSV specification. If a value contains
      * quotes, commas, carrige returns or line feeds, it is enclosed in quotes.
-     * Alos, quotes are escaped with another quotes.
+     * Also, quotes are escaped with another quotes.
      *
      * @param aValue A value to be escaped.
      * @return Escaped value.

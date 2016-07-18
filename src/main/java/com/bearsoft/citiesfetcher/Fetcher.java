@@ -1,8 +1,9 @@
 package com.bearsoft.citiesfetcher;
 
+import com.bearsoft.citiesfetcher.feed.CitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
-import com.bearsoft.citiesfetcher.transforms.CityToCsv;
-import com.bearsoft.citiesfetcher.transforms.JsonToCities;
+import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
+import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.BufferedOutputStream;
@@ -16,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,8 +49,13 @@ public class Fetcher {
      * @return Number of fetches cities.
      * @throws IOException if some problem occurs while File IO or while Json
      * handling.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
-    public final int work() throws IOException {
+    public final int work() throws IOException, PartialCityJsonException,
+            BadCitiesJsonException {
         HttpURLConnection connection = (HttpURLConnection) settings
                 .getCitySource().openConnection();
         try {
@@ -79,13 +84,12 @@ public class Fetcher {
                                             .getDestination()))) {
                         Reader reader = new InputStreamReader(body, charset);
                         JsonFactory jsonFactory = new JsonFactory();
-                        Function<City, StringBuilder> liner = new CityToCsv();
                         JsonParser parser = jsonFactory.createParser(reader);
-                        CitiesFeed feed = new JsonToCities(parser);
+                        CitiesFeed feed = new JsonCitiesFeed(parser);
 
                         Optional<City> city = feed.pull();
                         while (city.isPresent()) {
-                            String line = liner.apply(city.get()).toString();
+                            String line = Csv.to(city.get()).toString();
                             out.write(line.getBytes(StandardCharsets.UTF_8));
                             fetched++;
                             city = feed.pull();
@@ -116,10 +120,12 @@ public class Fetcher {
         } catch (IOException ex) {
             Logger.getLogger(Fetcher.class.getName())
                     .log(Level.SEVERE, ex.getMessage());
-        } catch (BadSettingsFormatException ex) {
+        } catch (BadArgumentsException ex) {
             System.out.println(ex.getMessage());
             System.out.println();
             System.out.println(HELP_MSG);
+        } catch (BadCitiesJsonException | PartialCityJsonException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -130,11 +136,17 @@ public class Fetcher {
      * @param args Arguments array.
      * @return number of fetched cities.
      * @throws IOException if it was thrown by {@code Fetcher.work()}
-     * @throws BadSettingsFormatException may be thown by (@code
+     * @throws BadArgumentsException may be thrown by (@code
      * Settings.parse()}
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
     public static int run(final String[] args) throws IOException,
-            BadSettingsFormatException {
+            BadArgumentsException,
+            PartialCityJsonException,
+            BadCitiesJsonException {
         Settings settings = Settings.parse(args);
         Fetcher fetcher = new Fetcher(settings);
         int fetched = fetcher.work();

@@ -100,12 +100,12 @@ public class Settings {
      * @param args String arguments array to be parsed.
      * @return {@code Settings} instance initialized with parameters from
      * {@code args}.
-     * @throws BadSettingsFormatException if some unexpected argument occured.
+     * @throws BadArgumentsException if some unexpected argument occured.
      * @throws UnsupportedEncodingException if code will use unsupported
      * encoding while {@code URLEncoder.encode}
      */
     public static Settings parse(final String... args)
-            throws BadSettingsFormatException, UnsupportedEncodingException {
+            throws BadArgumentsException, UnsupportedEncodingException {
         try {
             if (args.length > 0) {
                 URL url = new URL(String.format(ENDPOINT_TEMPLATE,
@@ -120,11 +120,11 @@ public class Settings {
                         return new Settings(url,
                                 new File(fileName(args[1])));
                     default:
-                        throw new BadSettingsFormatException(
+                        throw new BadArgumentsException(
                                 ARGUMENTS_EXPECTED_MSG);
                 }
             } else {
-                throw new BadSettingsFormatException(ARGUMENTS_EXPECTED_MSG);
+                throw new BadArgumentsException(ARGUMENTS_EXPECTED_MSG);
             }
         } catch (MalformedURLException ex) {
             throw new IllegalStateException(ex);

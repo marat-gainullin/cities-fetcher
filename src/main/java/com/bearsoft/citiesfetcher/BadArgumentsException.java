@@ -10,14 +10,14 @@ package com.bearsoft.citiesfetcher;
  *
  * @author mg
  */
-public class BadSettingsFormatException extends Exception {
+public class BadArgumentsException extends Exception {
 
     /**
      * The exception default constructor.
      *
      * @param aMessage An error message.
      */
-    public BadSettingsFormatException(final String aMessage) {
+    public BadArgumentsException(final String aMessage) {
         super(aMessage);
     }
 }

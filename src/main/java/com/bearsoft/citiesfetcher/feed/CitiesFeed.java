@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bearsoft.citiesfetcher;
+package com.bearsoft.citiesfetcher.feed;
 
 import com.bearsoft.citiesfetcher.model.City;
+import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
+import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -22,6 +24,12 @@ public interface CitiesFeed {
      *
      * @return {@code City} instance pulled from source.
      * @throws IOException if any IO problem or Json problem occurs.
+     * @throws PartialCityJsonException if some mandatory field of {@code City}
+     * are missing in Json tokens stream.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
-    Optional<City> pull() throws IOException;
+    Optional<City> pull() throws IOException,
+            PartialCityJsonException,
+            BadCitiesJsonException;
 }

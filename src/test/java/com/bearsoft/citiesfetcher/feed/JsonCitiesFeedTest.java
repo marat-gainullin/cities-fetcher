@@ -165,7 +165,6 @@ public final class JsonCitiesFeedTest {
      */
     @Test(expected = PartialCityJsonException.class)
     public void whenJsonCityWithoutLatitude() throws IOException,
-            
             PartialCityJsonException,
             BadCitiesJsonException {
         CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""

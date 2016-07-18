@@ -85,7 +85,8 @@ public final class JsonCitiesFeed implements CitiesFeed {
                 case START_OBJECT:
                     return readObject();
                 default:
-                    throw new BadCitiesJsonException(FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
+                    throw new BadCitiesJsonException(
+                            FINISH_OR_NEXT_OBJECT_EXPECTED_MSG);
             }
         } else {
             return Optional.empty();
@@ -198,7 +199,8 @@ public final class JsonCitiesFeed implements CitiesFeed {
      * @throws BadCitiesJsonException if some bad structure discovered while
      * parsing process.
      */
-    public static JsonCitiesFeed create(InputStream aStream, Charset aCharset)
+    public static JsonCitiesFeed create(
+            final InputStream aStream, final Charset aCharset)
             throws IOException, BadCitiesJsonException {
         Reader reader = new InputStreamReader(aStream, aCharset);
         return create(reader);
@@ -215,8 +217,8 @@ public final class JsonCitiesFeed implements CitiesFeed {
      * @throws BadCitiesJsonException if some bad structure discovered while
      * parsing process.
      */
-    public static JsonCitiesFeed create(Reader aReader) throws IOException,
-            BadCitiesJsonException {
+    public static JsonCitiesFeed create(final Reader aReader)
+            throws IOException, BadCitiesJsonException {
         JsonFactory jsonFactory = new JsonFactory();
         JsonParser parser = jsonFactory.createParser(aReader);
         JsonToken start = parser.nextToken();

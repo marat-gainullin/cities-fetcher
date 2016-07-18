@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  *
  * @author mg
  */
-public class Csv {
+public final class Csv {
 
     /**
      * Pattern for discover if a value contains symbols to be escaped.
@@ -22,11 +22,17 @@ public class Csv {
     private static final Pattern QUOTES_TEMPLATE = Pattern.compile("\"");
 
     /**
+     * Hidden constructor.
+     */
+    private Csv() {
+    }
+
+    /**
      * Transforms {@code City} instance to {@code StringBuilder}.
      *
      * @param aCity instance to be transformed to CSV line.
-     * @return {@code StringBuilder} instance with data of th city transformed to
-     * strings according to CSV specification.
+     * @return {@code StringBuilder} instance with data of th city transformed
+     * to strings according to CSV specification.
      */
     public static StringBuilder to(final City aCity) {
         StringBuilder builder = new StringBuilder();

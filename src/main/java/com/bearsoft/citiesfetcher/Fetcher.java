@@ -66,7 +66,14 @@ public class Fetcher {
         }
     }
 
-    private void ensureJson(String aContentType) throws
+    /**
+     * Ensures, that content type consists application/json mime type
+     * declaration.
+     *
+     * @param aContentType A content type to examine.
+     * @throws IOException if some IO problem occurs.
+     */
+    private void ensureJson(final String aContentType) throws
             IOException {
         if (!aContentType.startsWith(JSON_MIME_TYPE)) {
             throw new IOException(String
@@ -83,7 +90,7 @@ public class Fetcher {
      * extracted from.
      * @return {@code Charset} instance, read from content type header.
      */
-    private Charset lookupCharset(String aContentType) {
+    private Charset lookupCharset(final String aContentType) {
         String contentTypeTail = aContentType.substring(
                 JSON_MIME_TYPE.length());
         Charset charset;
@@ -112,7 +119,7 @@ public class Fetcher {
      * @throws IOException if some problem occurs while File IO or while Json
      * handling.
      */
-    private int download(HttpURLConnection aConnection) throws
+    private int download(final HttpURLConnection aConnection) throws
             BadCitiesJsonException, PartialCityJsonException, IOException {
         String contentType = aConnection.getContentType();
         ensureJson(contentType);

@@ -15,5 +15,5 @@ To generate project reports (FindBugs, CMD, PMD and CheckStyle), cd into a folde
 To view these reports, go to `target/site` subfolder and view `project-reports.html` file in this subfolder with your browser.
 
 ## Run
-Cd into a folder of the project and type on the command line `java -jar target/cities-fetcher-1.0-SNAPSHOT.jar "CITY_NAME"`.
+Cd into a `target` folder of the project and type on the command line `java -jar GoEuroTest.jar "CITY_NAME"`.
 

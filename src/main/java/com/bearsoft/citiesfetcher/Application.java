@@ -232,7 +232,8 @@ public class Application {
             + "usage:\n\n"
             + "java -jar your-jar-file.jar CITY_NAME [file-name.csv]\n\n"
             + "CITY_NAME - The city name template to narrow the search.\n"
-            + "file-name.csv - File, fetched cities to be written to. Optional.\n\n"
+            + "file-name.csv - File, fetched cities to be written to. "
+            + "Optional.\n\n"
             + "If CITY_NAME contains spaces, enclose it in qoutes please.\n"
             + "For example:\n"
             + "java -jar your-jar-file.jar \"Frankfurt am Main\"";

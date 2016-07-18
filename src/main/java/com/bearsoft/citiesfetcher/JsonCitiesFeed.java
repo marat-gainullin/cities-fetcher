@@ -51,11 +51,6 @@ public final class JsonCitiesFeed implements CitiesFeed {
     private final JsonParser parser;
 
     /**
-     * Indicates whether we have started to traverse a Json array or not.
-     */
-    private boolean started;
-
-    /**
      * {code JsonToCity} transformer constructor.
      *
      * @param aParser {@code JsonParser} to used as Json tokens source.
@@ -82,14 +77,7 @@ public final class JsonCitiesFeed implements CitiesFeed {
         JsonToken start = parser.nextToken();
         if (start != null) {
             if (start == JsonToken.START_ARRAY) {
-                if (started) {
-                    throw new BadCitiesJsonException(UNEXPECTED_ARRAY_MSG);
-                } else {
-                    started = true;
-                    return pull();
-                }
-            } else if (!started) {
-                throw new BadCitiesJsonException(ARRAY_EXPECTED_MSG);
+                throw new BadCitiesJsonException(UNEXPECTED_ARRAY_MSG);
             }
             switch (start) {
                 case END_ARRAY:
@@ -104,7 +92,7 @@ public final class JsonCitiesFeed implements CitiesFeed {
         }
     }
     /**
-     * Message for exception when first token is not array start.
+     * Message for exception when first token is not an array start.
      */
     private static final String ARRAY_EXPECTED_MSG
             = "Expected start of an array";
@@ -116,8 +104,8 @@ public final class JsonCitiesFeed implements CitiesFeed {
     private static final String FINISH_OR_NEXT_OBJECT_EXPECTED_MSG
             = "Expected end of array or next object start";
     /**
-     * Message for exception when array start token occurred again after start of
-     * cities array.
+     * Message for exception when array start token occurred again after start
+     * of cities array.
      */
     private static final String UNEXPECTED_ARRAY_MSG
             = "Unexpected start of an array";
@@ -207,8 +195,11 @@ public final class JsonCitiesFeed implements CitiesFeed {
      * @return {@code JsonCitiesFeed} instance initialized with an advanced
      * stream.
      * @throws IOException if a problem with IO occurs.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
-    public static JsonCitiesFeed create(InputStream aStream, Charset aCharset) throws IOException {
+    public static JsonCitiesFeed create(InputStream aStream, Charset aCharset)
+            throws IOException, BadCitiesJsonException {
         Reader reader = new InputStreamReader(aStream, aCharset);
         return create(reader);
     }
@@ -221,9 +212,18 @@ public final class JsonCitiesFeed implements CitiesFeed {
      * @return {@code JsonCitiesFeed} instance initialized with an advanced
      * stream.
      * @throws IOException if a problem with IO occurs.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
      */
-    public static JsonCitiesFeed create(Reader aReader) throws IOException {
+    public static JsonCitiesFeed create(Reader aReader) throws IOException,
+            BadCitiesJsonException {
         JsonFactory jsonFactory = new JsonFactory();
-        return new JsonCitiesFeed(jsonFactory.createParser(aReader));
+        JsonParser parser = jsonFactory.createParser(aReader);
+        JsonToken start = parser.nextToken();
+        if (start == JsonToken.START_ARRAY) {
+            return new JsonCitiesFeed(parser);
+        } else {
+            throw new BadCitiesJsonException(ARRAY_EXPECTED_MSG);
+        }
     }
 }

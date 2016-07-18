@@ -50,14 +50,14 @@ public class Fetcher {
      * @throws BadCitiesJsonException if some bad structure discovered while
      * parsing process.
      */
-    public final int work() throws IOException, PartialCityJsonException,
+    public final int fetch() throws IOException, PartialCityJsonException,
             BadCitiesJsonException {
         HttpURLConnection connection = (HttpURLConnection) settings
                 .getCitySource().openConnection();
         try {
             connection.setRequestProperty("Accept", JSON_MIME_TYPE);
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                return fetch(connection);
+                return download(connection);
             } else {
                 throw new IOException(connection.getResponseMessage());
             }
@@ -110,7 +110,7 @@ public class Fetcher {
      * @throws IOException if some problem occurs while File IO or while Json
      * handling.
      */
-    private int fetch(HttpURLConnection aConnection) throws
+    private int download(HttpURLConnection aConnection) throws
             BadCitiesJsonException, PartialCityJsonException, IOException {
         String contentType = aConnection.getContentType();
         ensureJson(contentType);
@@ -176,14 +176,18 @@ public class Fetcher {
             BadCitiesJsonException {
         Settings settings = Settings.parse(args);
         Fetcher fetcher = new Fetcher(settings);
-        int fetched = fetcher.work();
-        System.out.println("Written file:");
+        int fetched = fetcher.fetch();
+        System.out.println(WRITTEN_FILE_NSG);
         System.out.println(settings.getDestination().getAbsolutePath());
         if (fetched > 0) {
             System.out.println(String.format(REPORT_MSG, fetched));
         }
         return fetched;
     }
+    /**
+     * Message about written file.
+     */
+    private static final String WRITTEN_FILE_NSG = "Written file:";
 
     /**
      * Message about number of fetched cities.

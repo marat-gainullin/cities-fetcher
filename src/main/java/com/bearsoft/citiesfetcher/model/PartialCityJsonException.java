@@ -9,6 +9,11 @@ package com.bearsoft.citiesfetcher.model;
 public final class PartialCityJsonException extends Exception {
 
     /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = -8159825484237940759L;
+
+    /**
      * Constructor of the exception with absent name information.
      *
      * @param aFieldName Name of the absent field.

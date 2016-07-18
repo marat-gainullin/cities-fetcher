@@ -10,6 +10,11 @@ import java.io.File;
 public class FileAlreadyExistsException extends Exception {
 
     /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = 5058992489617301538L;
+
+    /**
      * Constructs new exception about already existent file.
      *
      * @param aFile A file we care about.

@@ -9,6 +9,11 @@ package com.bearsoft.citiesfetcher.feed;
 public class BadCitiesJsonException extends Exception {
 
     /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = 1692705561481746455L;
+
+    /**
      * Constructs a exception with the specified message.
      *
      * @param aMessage An error message.

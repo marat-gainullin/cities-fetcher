@@ -34,15 +34,15 @@ public class Settings {
      * Constructor of settings. protected because it is intended for creation by
      * factory method.
      *
-     * @param aCitySource Url of cities source end point.
-     * @param aDestination A path to output file.
+     * @param aCitySource URL of cities source end point.
+     * @param aDestinationPath A path to output file.
      * @see URL
      * @see File
      */
-    protected Settings(final URL aCitySource, final File aDestination) {
+    protected Settings(final URL aCitySource, final String aDestinationPath) {
         super();
         citiesSource = aCitySource;
-        destination = aDestination;
+        destination = new File(fileName(aDestinationPath));
     }
 
     /**
@@ -66,7 +66,7 @@ public class Settings {
     }
 
     /**
-     * Eliminates bad symbols from aname to make a valid filename.
+     * Eliminates bad symbols from a name to make a valid filename.
      *
      * @param aName A name to be transformed.
      * @return Transformed name that can be used as a file name.
@@ -109,11 +109,9 @@ public class Settings {
                         .replace("+", "%20")));
                 switch (args.length) {
                     case ONLY_CITY_ARGS_LENGTH:
-                        return new Settings(url,
-                                new File(fileName(args[0])));
+                        return new Settings(url, args[0]);
                     case WITH_FILE_ARGS_LENGTH:
-                        return new Settings(url,
-                                new File(fileName(args[1])));
+                        return new Settings(url, args[1]);
                     default:
                         throw new BadArgumentsException(
                                 ARGUMENTS_EXPECTED_MSG);

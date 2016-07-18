@@ -10,6 +10,11 @@ package com.bearsoft.citiesfetcher;
 public class BadArgumentsException extends Exception {
 
     /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = -8612196963560955422L;
+
+    /**
      * Constructs a exception with a message.
      *
      * @param aMessage An error message.

@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Test suite for JSON object to city transformation.
@@ -67,6 +68,68 @@ public final class JsonCitiesFeedTest {
                 Double.MIN_VALUE);
         assertEquals(TEST_LONGITUDE, read.get().getlongitude(),
                 Double.MIN_VALUE);
+    }
+
+    /**
+     * This is test for {@code JsonCitiesFeed} with multiple cities.
+     *
+     * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
+     */
+    @Test
+    public void whenJsonCities() throws IOException,
+            PartialCityJsonException,
+            BadCitiesJsonException {
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
+                + "[{\"_id\": 45"
+                + ", \"name\": \"Dusseldorf\""
+                + ", \"type\": \"location\""
+                + ", \"iata_airport_code\": null"
+                + ", \"someObject\":"
+                + " {\"a\": true, \"b\": [5, 6, {\"r\": -4, \"s\": false}, 8]}"
+                + ", \"someArray\":"
+                + " [{\"a\":7, \"b\": [], \"c\": true},"
+                + "  {\"a\": true, \"b\": 78}]"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8,"
+                + " \"so\": {\"latitude\": 456}, \"sa\": [{},{}]}"
+                + ", \"location_id\": 377078}"
+                + ",{\"_id\": 46"
+                + ", \"name\": \"Munich\""
+                + ", \"type\": \"POI\""
+                + ", \"iata_airport_code\": null"
+                + ", \"someObject\":"
+                + " {\"a\": true, \"b\": [5, 6, {\"r\": -4, \"s\": false}, 8]}"
+                + ", \"someArray\":"
+                + " [{\"a\":7, \"b\": [], \"c\": true},"
+                + "  {\"a\": true, \"b\": 78}]"
+                + ", \"geo_position\":"
+                + "{\"latitude\": 80.5, \"longitude\": 120.8,"
+                + " \"so\": {\"latitude\": 456}, \"sa\": [{},{}]}"
+                + ", \"location_id\": 377078"
+                + "}]"
+        ));
+        Optional<City> read1 = feed.pull();
+        assertEquals(TEST_CITY_ID, read1.get().getId());
+        assertEquals("Dusseldorf", read1.get().getName());
+        assertEquals("location", read1.get().getType());
+        assertEquals(TEST_LATITUDE, read1.get().getLatitude(),
+                Double.MIN_VALUE);
+        assertEquals(TEST_LONGITUDE, read1.get().getlongitude(),
+                Double.MIN_VALUE);
+        Optional<City> read2 = feed.pull();
+        assertEquals(TEST_CITY_ID + 1, read2.get().getId());
+        assertEquals("Munich", read2.get().getName());
+        assertEquals("POI", read2.get().getType());
+        assertEquals(TEST_LATITUDE, read2.get().getLatitude(),
+                Double.MIN_VALUE);
+        assertEquals(TEST_LONGITUDE, read2.get().getlongitude(),
+                Double.MIN_VALUE);
+        Optional<City> read3 = feed.pull();
+        assertFalse(read3.isPresent());
     }
 
     /**

@@ -1,8 +1,6 @@
 package com.bearsoft.citiesfetcher.feed;
 
-import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
-import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
-import com.bearsoft.citiesfetcher.feed.CitiesFeed;
+import com.bearsoft.citiesfetcher.model.PartialCityJsonException;
 import com.bearsoft.citiesfetcher.JsonCitiesFeed;
 import com.bearsoft.citiesfetcher.model.City;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -11,8 +9,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Optional;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

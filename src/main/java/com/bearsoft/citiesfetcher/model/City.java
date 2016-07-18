@@ -1,7 +1,5 @@
 package com.bearsoft.citiesfetcher.model;
 
-import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
-
 /**
  * This is a model class. Instances of this class can be read or written to or
  * from various sources or destinations. For example an instance of {@code City}
@@ -26,11 +24,11 @@ public final class City {
      */
     private final String type;
     /**
-     * Latitude of the city. Citites can be searched by this property.
+     * Latitude of the city. Cities can be searched by this property.
      */
     private final double latitude;
     /**
-     * longitude of the city. Citites can be searched by this property.
+     * longitude of the city. Cities can be searched by this property.
      */
     private final double longitude;
 
@@ -40,7 +38,7 @@ public final class City {
      * @param aId A city's identifier.
      * @param aName A city's name.
      * @param aType A city's type.
-     * @param aLatitude A city's laitude.
+     * @param aLatitude A city's latitude.
      * @param alongitude A city's longitude.
      */
     public City(final long aId, final String aName, final String aType,

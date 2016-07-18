@@ -1,6 +1,5 @@
 package com.bearsoft.citiesfetcher;
 
-import com.bearsoft.citiesfetcher.Csv;
 import com.bearsoft.citiesfetcher.model.City;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

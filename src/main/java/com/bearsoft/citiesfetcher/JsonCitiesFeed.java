@@ -8,7 +8,7 @@ package com.bearsoft.citiesfetcher;
 import com.bearsoft.citiesfetcher.model.City;
 import com.bearsoft.citiesfetcher.feed.BadCitiesJsonException;
 import com.bearsoft.citiesfetcher.feed.CitiesFeed;
-import com.bearsoft.citiesfetcher.feed.PartialCityJsonException;
+import com.bearsoft.citiesfetcher.model.PartialCityJsonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;

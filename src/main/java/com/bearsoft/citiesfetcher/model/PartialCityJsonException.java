@@ -1,4 +1,4 @@
-package com.bearsoft.citiesfetcher.feed;
+package com.bearsoft.citiesfetcher.model;
 
 /**
  * This exception is intended to be thrown by reader code when it discovers a

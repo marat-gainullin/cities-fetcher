@@ -57,50 +57,84 @@ public class Fetcher {
         try {
             connection.setRequestProperty("Accept", JSON_MIME_TYPE);
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                String contentType = connection.getContentType();
-                String[] mimeAndEncoding = contentType.split(";");
-                if (JSON_MIME_TYPE.equalsIgnoreCase(mimeAndEncoding[0])) {
-                    Charset charset;
-                    if (mimeAndEncoding.length > 1
-                            && mimeAndEncoding[1]
-                            .toLowerCase().startsWith(CHARSET_PREFIX)) {
-                        charset = Charset.forName(mimeAndEncoding[1]
-                                .substring(CHARSET_PREFIX.length()));
-                    } else {
-                        Logger.getLogger(Fetcher.class.getName())
-                                .log(Level.WARNING, MISSING_CHARSET_MSG);
-                        charset = StandardCharsets.UTF_8;
-                    }
-                    int fetched = 0;
-                    try (InputStream body = connection.getInputStream();
-                            OutputStream out
-                            = new BufferedOutputStream(
-                                    new FileOutputStream(
-                                            settings
-                                            .getDestination()))) {
-                        
-                        CitiesFeed feed = JsonCitiesFeed.create(body, charset);
-
-                        Optional<City> city = feed.pull();
-                        while (city.isPresent()) {
-                            String line = Csv.to(city.get()).toString();
-                            out.write(line.getBytes(StandardCharsets.UTF_8));
-                            fetched++;
-                            city = feed.pull();
-                        }
-                        out.flush();
-                    }
-                    return fetched;
-                } else {
-                    throw new IOException(String
-                            .format(BAD_CONTENT_TYPE_MSG, JSON_MIME_TYPE));
-                }
+                return fetch(connection);
             } else {
                 throw new IOException(connection.getResponseMessage());
             }
         } finally {
             connection.disconnect();
         }
+    }
+
+    private void ensureJson(String aContentType) throws
+            IOException {
+        if (!aContentType.startsWith(JSON_MIME_TYPE)) {
+            throw new IOException(String
+                    .format(BAD_CONTENT_TYPE_MSG, JSON_MIME_TYPE));
+        }
+    }
+
+    /**
+     * Extracts charset from a connection from 'Content-Type' response header.
+     * If it can't find charset part of content type header, it falls back to
+     * utf-8 encoding.
+     *
+     * @param aContentType A content-type header value the charset should be
+     * extracted from.
+     * @return {@code Charset} instance, read from content type header.
+     */
+    private Charset lookupCharset(String aContentType) {
+        String contentTypeTail = aContentType.substring(
+                JSON_MIME_TYPE.length());
+        Charset charset;
+        if (contentTypeTail.toLowerCase().startsWith(CHARSET_PREFIX)) {
+            charset = Charset.forName(
+                    contentTypeTail.substring(CHARSET_PREFIX.length()));
+        } else {
+            Logger.getLogger(Fetcher.class.getName())
+                    .log(Level.WARNING, MISSING_CHARSET_MSG);
+            charset = StandardCharsets.UTF_8;
+        }
+        return charset;
+    }
+
+    /**
+     * Fetches all available cities from a connection to an endpoint.
+     *
+     * @param aConnection A connection to fetch from.
+     * @return Number of cities fetched.
+     * @throws BadCitiesJsonException if some bad structure discovered while
+     * parsing process.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
+     * @throws IOException if some problem occurs while File IO or while Json
+     * handling.
+     */
+    private int fetch(HttpURLConnection aConnection) throws
+            BadCitiesJsonException, PartialCityJsonException, IOException {
+        String contentType = aConnection.getContentType();
+        ensureJson(contentType);
+        Charset charset = lookupCharset(contentType);
+        int fetched = 0;
+        try (InputStream body = aConnection.getInputStream();
+                OutputStream out
+                = new BufferedOutputStream(
+                        new FileOutputStream(
+                                settings
+                                .getDestination()))) {
+
+            CitiesFeed feed = JsonCitiesFeed.create(body, charset);
+
+            Optional<City> city = feed.pull();
+            while (city.isPresent()) {
+                String line = Csv.to(city.get()).toString();
+                out.write(line.getBytes(StandardCharsets.UTF_8));
+                fetched++;
+                city = feed.pull();
+            }
+            out.flush();
+        }
+        return fetched;
     }
 
     /**
@@ -130,8 +164,7 @@ public class Fetcher {
      * @param args Arguments array.
      * @return number of fetched cities.
      * @throws IOException if it was thrown by {@code Fetcher.work()}
-     * @throws BadArgumentsException may be thrown by (@code
-     * Settings.parse()}
+     * @throws BadArgumentsException may be thrown by (@code Settings.parse()}
      * @throws PartialCityJsonException If some part of mandatory data is
      * absent.
      * @throws BadCitiesJsonException if some bad structure discovered while
@@ -170,7 +203,7 @@ public class Fetcher {
     /**
      * "charset=" prefix for content-type header value parsing.
      */
-    private static final String CHARSET_PREFIX = "charset=";
+    private static final String CHARSET_PREFIX = ";charset=";
     /**
      * Jaon mime type name constant.
      */

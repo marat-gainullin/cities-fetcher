@@ -21,7 +21,7 @@ import org.junit.Test;
  *
  * @author mg
  */
-public class CityBuilderTest {
+public final class CityBuilderTest {
 
     /**
      * Test city longitude.

@@ -70,7 +70,7 @@ public final class JsonCitiesFeedTest {
     }
 
     /**
-     * This is test for {@code JsonCitiesFeed} with empty json.
+     * This is test for {@code JsonCitiesFeed} with empty Json.
      *
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is
@@ -86,7 +86,7 @@ public final class JsonCitiesFeedTest {
     }
 
     /**
-     * This is test for {@code JsonCitiesFeed} with unexpected array json.
+     * This is test for {@code JsonCitiesFeed} with unexpected array Json.
      *
      * @throws IOException if Json parser throws it.
      * @throws PartialCityJsonException If some part of mandatory data is

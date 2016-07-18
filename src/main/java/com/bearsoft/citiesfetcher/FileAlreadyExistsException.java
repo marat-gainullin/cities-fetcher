@@ -14,7 +14,8 @@ public class FileAlreadyExistsException extends Exception {
      *
      * @param aFile A file we care about.
      */
-    public FileAlreadyExistsException(File aFile) {
-        super(String.format("File %s already exists.", aFile.getAbsolutePath()));
+    public FileAlreadyExistsException(final File aFile) {
+        super(String.format("Destination file already exists: %s",
+                aFile.getAbsolutePath()));
     }
 }

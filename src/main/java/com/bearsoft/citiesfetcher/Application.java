@@ -158,7 +158,8 @@ public class Application {
             System.out.println(ex.getMessage());
             System.out.println();
             System.out.println(HELP_MSG);
-        } catch (BadCitiesJsonException | PartialCityJsonException | FileAlreadyExistsException ex) {
+        } catch (BadCitiesJsonException | PartialCityJsonException
+                | FileAlreadyExistsException ex) {
             System.out.println(ex.getMessage());
         }
     }

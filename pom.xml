@@ -21,7 +21,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.bearsoft.citiesfetcher.Fetcher</mainClass>
+                            <mainClass>com.bearsoft.citiesfetcher.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -36,7 +36,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.bearsoft.citiesfetcher.Fetcher</mainClass>
+                            <mainClass>com.bearsoft.citiesfetcher.Application</mainClass>
                         </manifest>
                     </archive>
 

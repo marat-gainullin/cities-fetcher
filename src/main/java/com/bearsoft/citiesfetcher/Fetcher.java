@@ -126,11 +126,8 @@ public class Fetcher {
         Charset charset = lookupCharset(contentType);
         int fetched = 0;
         try (InputStream body = aConnection.getInputStream();
-                OutputStream out
-                = new BufferedOutputStream(
-                        new FileOutputStream(
-                                settings
-                                .getDestination()))) {
+                OutputStream out = new BufferedOutputStream(
+                        new FileOutputStream(settings.getDestination()))) {
 
             CitiesFeed feed = JsonCitiesFeed.create(body, charset);
 

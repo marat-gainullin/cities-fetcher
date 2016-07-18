@@ -43,7 +43,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonCity() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -59,7 +59,7 @@ public final class JsonCitiesFeedTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        Optional<City> read = transformer.pull();
+        Optional<City> read = feed.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
         assertEquals("location", read.get().getType());
@@ -98,8 +98,8 @@ public final class JsonCitiesFeedTest {
     public void whenJsonUnexpectedArray() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader("[[]]"));
-        transformer.pull();
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader("[[]]"));
+        feed.pull();
     }
 
     /**
@@ -115,7 +115,7 @@ public final class JsonCitiesFeedTest {
     public void whenJsonUnclosedArray() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader("["));
-        transformer.pull();
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader("["));
+        feed.pull();
     }
 }

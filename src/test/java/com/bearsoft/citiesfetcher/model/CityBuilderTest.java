@@ -49,7 +49,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutType() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"someObject\": {\"a\": true,"
@@ -62,7 +62,7 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        Optional<City> read = transformer.pull();
+        Optional<City> read = feed.pull();
         assertEquals(TEST_CITY_ID, read.get().getId());
         assertEquals("Dusseldorf", read.get().getName());
         assertNull(read.get().getType());
@@ -85,7 +85,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutName() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
@@ -94,7 +94,7 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        transformer.pull();
+        feed.pull();
     }
 
     /**
@@ -110,7 +110,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutId() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
                 + ", \"iata_airport_code\": null"
@@ -119,7 +119,7 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        transformer.pull();
+        feed.pull();
     }
 
     /**
@@ -136,7 +136,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutLatitude() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -145,7 +145,7 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        transformer.pull();
+        feed.pull();
     }
 
     /**
@@ -162,7 +162,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutlongitude() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -171,7 +171,7 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        transformer.pull();
+        feed.pull();
     }
 
     /**
@@ -188,7 +188,7 @@ public class CityBuilderTest {
     public void whenJsonCityWithoutGeoPosition() throws IOException,
             PartialCityJsonException,
             BadCitiesJsonException {
-        CitiesFeed transformer = JsonCitiesFeed.create(new StringReader(""
+        CitiesFeed feed = JsonCitiesFeed.create(new StringReader(""
                 + "[{\"_id\": 45"
                 + ", \"name\": \"Dusseldorf\""
                 + ", \"type\": \"location\""
@@ -196,6 +196,6 @@ public class CityBuilderTest {
                 + ", \"location_id\": 377078"
                 + "}]"
         ));
-        transformer.pull();
+        feed.pull();
     }
 }

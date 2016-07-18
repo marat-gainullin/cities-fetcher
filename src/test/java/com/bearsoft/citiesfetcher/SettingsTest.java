@@ -15,7 +15,7 @@ import org.junit.Test;
 public class SettingsTest {
 
     /**
-     * Tests a case when only one cargument present.
+     * Tests a case when only one argument present.
      *
      * @throws BadArgumentsException if the exception is thrown in
      * {@code Settings.parse()}.

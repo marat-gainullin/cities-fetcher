@@ -1,5 +1,6 @@
 package com.bearsoft.citiesfetcher;
 
+import com.bearsoft.citiesfetcher.transforms.PartialCityJsonException;
 import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,10 +18,13 @@ public final class FetcherTest {
      *
      * @throws IOException if it is thrown in {@code Fetcher} code.
      * @throws BadSettingsFormatException if settings are bad.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test
     public void whenSimpleCity() throws IOException,
-            BadSettingsFormatException {
+            BadSettingsFormatException,
+            PartialCityJsonException {
         assertTrue(Fetcher.run(new String[]{
             "Berlin"
         }) > 0);
@@ -31,10 +35,13 @@ public final class FetcherTest {
      *
      * @throws IOException if it is thrown in {@code Fetcher} code.
      * @throws BadSettingsFormatException if settings are bad.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test
     public void whenComplexCity() throws IOException,
-            BadSettingsFormatException {
+            BadSettingsFormatException,
+            PartialCityJsonException {
         assertTrue(Fetcher.run(new String[]{
             "Frankfurt am Main"
         }) > 0);
@@ -45,10 +52,13 @@ public final class FetcherTest {
      *
      * @throws IOException if it is thrown in {@code Fetcher} code.
      * @throws BadSettingsFormatException if settings are bad.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test
     public void whenUnexistentCity() throws IOException,
-            BadSettingsFormatException {
+            BadSettingsFormatException,
+            PartialCityJsonException {
         assertEquals(0, Fetcher.run(new String[]{
             "Some unexistent city :)"
         }));

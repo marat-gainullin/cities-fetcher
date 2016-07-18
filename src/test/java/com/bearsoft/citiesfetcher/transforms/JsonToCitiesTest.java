@@ -22,9 +22,12 @@ public final class JsonToCitiesTest {
      * This is simple test for {@code JsonToCity}.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test
-    public void whenJsonFullCity() throws IOException {
+    public void whenJsonFullCity() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -69,9 +72,12 @@ public final class JsonToCitiesTest {
      * This is test for how {@code JsonToCity} handles absent type field.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test
-    public void whenJsonCityWithoutType() throws IOException {
+    public void whenJsonCityWithoutType() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -101,9 +107,12 @@ public final class JsonToCitiesTest {
      * This is test for how {@code JsonToCity} handles absent name field.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutName() throws IOException {
+    public void whenJsonCityWithoutName() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -122,9 +131,12 @@ public final class JsonToCitiesTest {
      * This is test for how {@code JsonToCity} handles absent id field.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutId() throws IOException {
+    public void whenJsonCityWithoutId() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"name\": \"Dusseldorf\""
@@ -143,9 +155,13 @@ public final class JsonToCitiesTest {
      * This is test for how {@code JsonToCity} handles absent latitude field.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutLatitude() throws IOException {
+    public void whenJsonCityWithoutLatitude() throws IOException,
+            
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -164,9 +180,12 @@ public final class JsonToCitiesTest {
      * This is test for how {@code JsonToCity} handles absent longitude field.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutlongitude() throws IOException {
+    public void whenJsonCityWithoutlongitude() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"
@@ -186,9 +205,12 @@ public final class JsonToCitiesTest {
      * in first level object.
      *
      * @throws IOException if Json parser throws it.
+     * @throws PartialCityJsonException If some part of mandatory data is
+     * absent.
      */
     @Test(expected = PartialCityJsonException.class)
-    public void whenJsonCityWithoutGeoPosition() throws IOException {
+    public void whenJsonCityWithoutGeoPosition() throws IOException,
+            PartialCityJsonException {
         JsonFactory factory = new JsonFactory();
         JsonParser parser = factory.createParser(new StringReader(""
                 + "[{\"_id\": 45"

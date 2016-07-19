@@ -51,7 +51,7 @@ public final class JsonCitiesFeed implements CitiesFeed {
     private final JsonParser parser;
 
     /**
-     * {code JsonCitiesFeed} transformer constructor.
+     * {@code JsonCitiesFeed} transformer constructor.
      *
      * @param aParser {@code JsonParser} to used as Json tokens source.
      */
@@ -99,9 +99,9 @@ public final class JsonCitiesFeed implements CitiesFeed {
             = "Expected end of array or next object start";
 
     /**
-     * Reads a object from Json token stream.
+     * Reads an object from Json token stream.
      *
-     * @return {code Optional<City>} instance.
+     * @return {@code Optional<City>} instance.
      * @throws IOException if a problem with IO occurred.
      * @throws PartialCityJsonException if some mandatory fields of {@code City}
      * are missing.
@@ -197,7 +197,7 @@ public final class JsonCitiesFeed implements CitiesFeed {
     }
 
     /**
-     * Creates {@code JsonCitiesFeed} instance and advances {@code aStream} to
+     * Creates {@code JsonCitiesFeed} instance and advances {@code aReader} to
      * first start object token.
      *
      * @param aReader A reader to be used as a source of Json tokens.

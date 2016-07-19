@@ -129,7 +129,7 @@ public final class City {
          * Adds id attribute to the builder.
          *
          * @param aValue aValue of id attribute.
-         * @return Underlying this {@code CityBuilder} instance.
+         * @return This {@code CityBuilder} instance.
          */
         public Builder id(final long aValue) {
             id = aValue;
@@ -140,7 +140,7 @@ public final class City {
          * Adds name attribute to the builder.
          *
          * @param aValue aValue of name attribute.
-         * @return Underlying this {@code CityBuilder} instance.
+         * @return This {@code CityBuilder} instance.
          */
         public Builder name(final String aValue) {
             name = aValue;
@@ -151,7 +151,7 @@ public final class City {
          * Adds type attribute to the builder.
          *
          * @param aValue aValue of type attribute.
-         * @return Underlying this {@code CityBuilder} instance.
+         * @return This {@code CityBuilder} instance.
          */
         public Builder type(final String aValue) {
             type = aValue;
@@ -162,7 +162,7 @@ public final class City {
          * Adds latitude attribute to the builder.
          *
          * @param aValue aValue of latitude attribute.
-         * @return Underlying this {@code CityBuilder} instance.
+         * @return This {@code CityBuilder} instance.
          */
         public Builder latitude(final double aValue) {
             latitude = aValue;
@@ -173,7 +173,7 @@ public final class City {
          * Adds longitude attribute to the builder.
          *
          * @param aValue aValue of longitude attribute.
-         * @return Underlying this {@code CityBuilder} instance.
+         * @return This {@code CityBuilder} instance.
          */
         public Builder longitude(final double aValue) {
             longitude = aValue;

@@ -218,7 +218,7 @@ public class Application {
             = "The endpoint server doesn't provide charset information. "
             + "Falling to utf-8";
     /**
-     * "charset=" prefix for content-type header value parsing.
+     * ";charset=" prefix for content-type header value parsing.
      */
     private static final String CHARSET_PREFIX = ";charset=";
     /**

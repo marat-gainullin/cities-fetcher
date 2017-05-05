@@ -3,6 +3,7 @@ GoEuro cities fetcher
 
 ## Install
 The fetcher requires Java 8 to run.
+It is built by Maven. So ensue maven is installed on your system and `mvn` command is on path.
 Since Java 8 is installed, everything is ready to fetch cities.
 
 ## Build
